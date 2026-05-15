@@ -47,10 +47,10 @@ export default function HistoryPage() {
   ];
 
   return (
-    <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col relative overflow-x-hidden" style={{ fontFamily: "'Manrope', sans-serif" }}>
+    <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col relative" style={{ fontFamily: "'Manrope', sans-serif" }}>
 
       {/* Ambient Background */}
-      <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
+      <div className="fixed inset-0 z-[-1] pointer-events-none">
         <motion.div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#abcfb6]/20 blur-[120px]" animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 16, repeat: Infinity }} />
         <motion.div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#84d4d4]/12 blur-[150px]" animate={{ scale: [1.1, 1, 1.1] }} transition={{ duration: 20, repeat: Infinity }} />
       </div>
