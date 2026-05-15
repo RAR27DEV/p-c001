@@ -43,6 +43,7 @@ export default function RegisterPage() {
     { value: 'Manager', label: 'Manager / Lead / Supervisor', icon: 'supervisor_account' },
     { value: 'Sales', label: 'Sales / Marketing / Support', icon: 'storefront' },
     { value: 'HR', label: 'HR / Admin / Operasional', icon: 'badge' },
+    { value: 'Lainnya', label: 'Lainnya', icon: 'more_horiz' },
   ];
 
   const validateStep1 = () => {
@@ -252,11 +253,6 @@ export default function RegisterPage() {
         </form>
 
         {/* Link ke login */}
-        <motion.div variants={itemVariants} className="mt-5 text-center">
-          <p className="text-[13px] sm:text-[14px] text-[#424843]">
-            Sudah punya akun? <a onClick={() => navigate('/login')} className="text-[#456551] font-semibold hover:underline decoration-[#456551]/30 underline-offset-4 cursor-pointer transition-colors">Masuk di sini.</a>
-          </p>
-        </motion.div>
       </motion.div>
   );
 }
