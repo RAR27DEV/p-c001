@@ -57,7 +57,7 @@ export default function HistoryPage() {
 
       <Navbar />
 
-      <main className="max-w-[1280px] mx-auto px-8 py-12 flex flex-col gap-12 w-full">
+      <main className="max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12 flex flex-col gap-8 sm:gap-12 w-full">
 
         {/* Judul */}
         <FadeInView className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -66,7 +66,7 @@ export default function HistoryPage() {
               <span className="material-symbols-outlined text-[14px]">monitoring</span>
               {"Perjalananmu"}
             </motion.div>
-            <h1 className="text-[44px] leading-[1.15] font-semibold text-[#1a1c1a] mb-3" style={{ fontFamily: "'Newsreader', serif", letterSpacing: '-0.02em' }}>
+            <h1 className="text-[28px] sm:text-[36px] md:text-[44px] leading-[1.15] font-semibold text-[#1a1c1a] mb-3" style={{ fontFamily: "'Newsreader', serif", letterSpacing: '-0.02em' }}>
               {"Riwayat Pemeriksaan"}
             </h1>
             <p className="text-[17px] leading-[1.6] text-[#424843] max-w-xl">
@@ -148,7 +148,7 @@ export default function HistoryPage() {
                   <div>
                     <h3 className="text-[24px] font-medium text-[#1a1c1a] mb-2" style={{ fontFamily: "'Newsreader', serif" }}>
                       {activeFilter !== 'all'
-                        ? t(`No ${activeFilter} records yet`, `Belum ada catatan ${activeFilter === 'quiz' ? 'kuis' : 'scan'}`)
+                        ? `Belum ada catatan ${activeFilter === 'quiz' ? 'kuis' : 'scan'}`
                         : "Ceritamu Dimulai di Sini"}
                     </h3>
                     <p className="text-[15px] text-[#424843] max-w-sm mx-auto leading-relaxed">
@@ -200,7 +200,7 @@ export default function HistoryPage() {
         {/* Banner Motivasi */}
         <FadeInView>
           <motion.div className="relative rounded-2xl overflow-hidden mt-4" whileHover={{ scale: 1.005 }}>
-            <div className="absolute inset-0 bg-gradient-to-r from-[#456551] via-[#5a8a6c] to-[#3d5e4a]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#5a9e72] via-[#7cb88e] to-[#5a9e72]" />
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 p-8 md:p-10">
               <div className="flex items-center gap-5">
                 <motion.div className="w-14 h-14 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20 shrink-0" animate={{ rotate: [0, 5, 0] }} transition={{ duration: 6, repeat: Infinity }}>
@@ -221,13 +221,23 @@ export default function HistoryPage() {
 
       {/* Footer */}
       <FadeInView>
-        <footer className="w-full py-10 mt-16 border-t border-[#dadad7] bg-[#FAF7F2]">
-          <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined filled text-[#7C9E87]">spa</span>
-              <span className="text-lg font-semibold text-[#7C9E87]" style={{ fontFamily: "'Newsreader', serif" }}>BurnoutSense</span>
+        <footer className="w-full mt-12 sm:mt-16 bg-gradient-to-b from-[#faf9f6] to-[#eef6f0]">
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8">
+            <div className="w-full h-px bg-gradient-to-r from-transparent via-[#7c9e87]/30 to-transparent" />
+            <div className="py-10 sm:py-14 flex flex-col items-center gap-6">
+              <div className="flex items-center gap-2.5">
+                <span className="material-symbols-outlined filled text-[#7c9e87] text-[28px]">spa</span>
+                <span className="text-[22px] font-semibold text-[#456551] tracking-tight" style={{ fontFamily: "'Newsreader', serif" }}>BurnoutSense</span>
+              </div>
+              <p className="text-[14px] text-[#727973] text-center max-w-md leading-relaxed">
+                Ruang tenang untuk memahami dirimu. Deteksi burnout lebih awal, pulih lebih cepat.
+              </p>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#c7ebd1]/20 border border-[#7c9e87]/10">
+                <span className="material-symbols-outlined text-[14px] text-[#7c9e87]">info</span>
+                <span className="text-[11px] sm:text-[12px] text-[#727973]">Bukan pengganti diagnosis profesional</span>
+              </div>
+              <p className="text-[12px] text-[#727973]/60 mt-2">© 2025 BurnoutSense · Capstone Project</p>
             </div>
-            <div className="text-sm text-[#727973]">© 2024 BurnoutSense. {"Hak cipta dilindungi."}</div>
           </div>
         </footer>
       </FadeInView>

@@ -44,7 +44,7 @@ export default function ResultPage() {
   const anxietyPercent = Math.min(Math.round((score / 25) * 50), 100);
 
   return (
-    <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col items-center justify-center p-4 relative" style={{ fontFamily: "'Manrope', sans-serif" }}>
+    <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col items-center justify-center p-4 sm:p-6 relative" style={{ fontFamily: "'Manrope', sans-serif" }}>
 
       <motion.div className="ambient-shape ambient-1" animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 14, repeat: Infinity }} />
       <motion.div className="ambient-shape ambient-2" animate={{ scale: [1.1, 1, 1.1] }} transition={{ duration: 18, repeat: Infinity }} />
@@ -53,7 +53,7 @@ export default function ResultPage() {
         initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full max-w-2xl glass-card rounded-xl p-8 md:p-10 flex flex-col gap-8 relative z-10"
+        className="w-full max-w-2xl glass-card rounded-xl p-5 sm:p-8 md:p-10 flex flex-col gap-6 sm:gap-8 relative z-10"
       >
         {/* Method + Status Badge */}
         <motion.div className="flex items-center justify-between" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
@@ -83,7 +83,7 @@ export default function ResultPage() {
             <span className="material-symbols-outlined filled text-3xl" style={{ color: statusColor }}>{statusIcon}</span>
           </motion.div>
           <div>
-            <h1 className="text-[36px] leading-[1.3] font-medium mb-2" style={{ fontFamily: "'Newsreader', serif", color: statusColor }}>
+            <h1 className="text-[24px] sm:text-[36px] leading-[1.3] font-medium mb-2" style={{ fontFamily: "'Newsreader', serif", color: statusColor }}>
               {title}
             </h1>
             <p className="text-[16px] leading-[1.6] text-[#424843]">{result.description}</p>
@@ -149,7 +149,7 @@ export default function ResultPage() {
         </motion.div>
 
         {/* Action Buttons */}
-        <motion.div className="flex gap-3" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.3 }}>
+        <motion.div className="flex flex-col sm:flex-row gap-3" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.3 }}>
           <motion.button onClick={() => navigate('/history')} className="flex-1 bg-[#e8e8e5] text-[#1a1c1a] font-semibold text-sm tracking-[0.05em] py-3 rounded-xl border border-[#c2c8c1]/30 hover:bg-[#e3e3df] transition-all" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }}>
             {"Lihat Riwayat"}
           </motion.button>

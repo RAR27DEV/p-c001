@@ -27,12 +27,9 @@ export default function ScanPage() {
         videoRef.current.onloadedmetadata = () => setCameraReady(true);
       }
     } catch (err) {
-      setError(t(
-        "Camera access denied. Please allow camera permission.",
-        "Akses kamera ditolak. Silakan izinkan akses kamera."
-      ));
+      setError("Akses kamera ditolak. Silakan izinkan akses kamera.");
     }
-  }, [t]);
+  }, []);
 
   // Stop webcam
   const stopCamera = useCallback(() => {
@@ -100,7 +97,7 @@ export default function ScanPage() {
     <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col" style={{ fontFamily: "'Manrope', sans-serif" }}>
 
       {/* Bar Atas */}
-      <div className="w-full px-6 py-4 flex items-center justify-between max-w-3xl mx-auto">
+      <div className="w-full px-4 sm:px-6 py-4 flex items-center justify-between max-w-3xl mx-auto">
         <motion.button onClick={() => navigate('/start')} className="flex items-center gap-2 text-[#727973] hover:text-[#1a1c1a] transition-colors font-medium text-sm" whileHover={{ x: -3 }}>
           <span className="material-symbols-outlined text-[20px]">arrow_back</span>{"Kembali"}
         </motion.button>
@@ -110,12 +107,12 @@ export default function ScanPage() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 pb-12">
-        <div className="w-full max-w-lg flex flex-col items-center gap-8">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pb-8 sm:pb-12">
+        <div className="w-full max-w-lg flex flex-col items-center gap-6 sm:gap-8">
 
           {/* Title */}
           <FadeInView className="text-center">
-            <h1 className="text-[32px] leading-[1.3] font-medium text-[#1a1c1a] mb-2" style={{ fontFamily: "'Newsreader', serif" }}>
+            <h1 className="text-[24px] sm:text-[32px] leading-[1.3] font-medium text-[#1a1c1a] mb-2" style={{ fontFamily: "'Newsreader', serif" }}>
               {"Analisis Scan Wajah"}
             </h1>
             <p className="text-[15px] text-[#424843] max-w-sm mx-auto leading-relaxed">

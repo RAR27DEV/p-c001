@@ -12,6 +12,7 @@ export default function QuizPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [direction, setDirection] = useState(1);
+  const [customMode, setCustomMode] = useState({}); // { [field]: true } untuk mode "Lainnya"
 
   useEffect(() => {
     QuizAPI.getQuestions().then(res => {
@@ -24,7 +25,14 @@ export default function QuizPage() {
   const total = questions.length;
   const progress = total > 0 ? ((current + 1) / total) * 100 : 0;
 
-  const handleAnswer = (value) => { setAnswers({ ...answers, [q.field]: value }); };
+  const handleAnswer = (value) => {
+    setAnswers({ ...answers, [q.field]: value });
+    setCustomMode({ ...customMode, [q.field]: false });
+  };
+  const enableCustom = () => {
+    setCustomMode({ ...customMode, [q.field]: true });
+    setAnswers({ ...answers, [q.field]: '' });
+  };
   const goNext = () => { if (current < total - 1) { setDirection(1); setCurrent(current + 1); } };
   const goPrev = () => { if (current > 0) { setDirection(-1); setCurrent(current - 1); } };
 
@@ -75,29 +83,26 @@ export default function QuizPage() {
 
   return (
     <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col" style={{ fontFamily: "'Manrope', sans-serif" }}>
-      <div className="w-full px-6 py-4 flex items-center justify-between max-w-3xl mx-auto">
+      <div className="w-full px-4 sm:px-6 py-4 flex items-center justify-between max-w-3xl mx-auto">
         <motion.button onClick={() => navigate('/start')} className="flex items-center gap-2 text-[#727973] hover:text-[#1a1c1a] transition-colors font-medium text-sm" whileHover={{ x: -3 }} whileTap={{ scale: 0.95 }}>
           <span className="material-symbols-outlined text-[20px]">arrow_back</span>Keluar
         </motion.button>
         <span className="text-sm font-semibold text-[#456551] tracking-wide">{current + 1} / {total}</span>
       </div>
 
-      <div className="w-full max-w-3xl mx-auto px-6">
+      <div className="w-full max-w-3xl mx-auto px-4 sm:px-6">
         <div className="h-2 w-full bg-[#e3e3df] rounded-full overflow-hidden">
           <motion.div className="h-full rounded-full bg-gradient-to-r from-[#456551] to-[#7c9e87]" animate={{ width: `${progress}%` }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} />
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center px-6 py-12">
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
         <div className="w-full max-w-2xl">
           <AnimatePresence mode="wait" custom={direction}>
             {q && (
               <motion.div key={q.id} custom={direction} initial={{ opacity: 0, x: direction * 60, filter: 'blur(4px)' }} animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }} exit={{ opacity: 0, x: -direction * 60, filter: 'blur(4px)' }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} className="flex flex-col gap-8">
                 <div>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c7ebd1]/30 text-[#456551] font-bold text-xs tracking-wider uppercase mb-4">
-                    <span className="material-symbols-outlined text-[14px]">quiz</span>{q.id.toUpperCase()}
-                  </span>
-                  <h2 className="text-[28px] leading-[1.35] font-medium text-[#1a1c1a] mt-3" style={{ fontFamily: "'Newsreader', serif" }}>
+                  <h2 className="text-[22px] sm:text-[28px] leading-[1.35] font-medium text-[#1a1c1a]" style={{ fontFamily: "'Newsreader', serif" }}>
                     {q.text_id}
                   </h2>
                 </div>
@@ -110,7 +115,7 @@ export default function QuizPage() {
                 ) : (
                   <div className="flex flex-col gap-3">
                     {q.options.map((opt, idx) => {
-                      const isSelected = answers[q.field] === opt.value;
+                      const isSelected = !customMode[q.field] && answers[q.field] === opt.value;
                       return (
                         <motion.button key={idx} type="button" onClick={() => handleAnswer(opt.value)} className={`text-left px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium text-[15px] flex items-center gap-3 ${isSelected ? 'bg-[#456551] text-white border-[#456551] shadow-[0_4px_16px_rgba(69,101,81,0.2)]' : 'bg-white/60 text-[#1a1c1a] border-[#c2c8c1]/30 hover:border-[#7c9e87] hover:bg-white'}`} whileHover={{ scale: 1.01, x: 4 }} whileTap={{ scale: 0.99 }}>
                           <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${isSelected ? 'border-white bg-white/20' : 'border-[#c2c8c1]'}`}>
@@ -120,6 +125,38 @@ export default function QuizPage() {
                         </motion.button>
                       );
                     })}
+
+                    {q.allowCustom && (
+                      <>
+                        <motion.button type="button" onClick={enableCustom} className={`text-left px-5 py-4 rounded-2xl border-2 border-dashed transition-all duration-300 font-medium text-[15px] flex items-center gap-3 ${customMode[q.field] ? 'bg-[#456551] text-white border-[#456551] shadow-[0_4px_16px_rgba(69,101,81,0.2)]' : 'bg-white/40 text-[#456551] border-[#7c9e87]/50 hover:border-[#456551] hover:bg-white/70'}`} whileHover={{ scale: 1.01, x: 4 }} whileTap={{ scale: 0.99 }}>
+                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${customMode[q.field] ? 'border-white bg-white/20' : 'border-[#7c9e87]'}`}>
+                            <span className={`material-symbols-outlined text-[14px] ${customMode[q.field] ? 'text-white' : 'text-[#7c9e87]'}`}>edit</span>
+                          </div>
+                          <span>Lainnya (isi manual)</span>
+                        </motion.button>
+
+                        {customMode[q.field] && (
+                          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="relative group max-w-xs mt-1">
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#727973]/60 group-focus-within:text-[#456551] transition-colors">tag</span>
+                            <input
+                              type="number"
+                              step={q.field === 'sleep_hours' || q.field === 'physical_activity_hrs' ? '0.5' : '1'}
+                              min="0"
+                              autoFocus
+                              placeholder={q.customPlaceholder}
+                              value={answers[q.field] ?? ''}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                if (val === '' || validateNumber(parseFloat(val))) {
+                                  setAnswers({ ...answers, [q.field]: val });
+                                }
+                              }}
+                              className="w-full pl-12 pr-4 py-4 bg-white/80 border-2 border-[#456551]/40 rounded-2xl text-[18px] text-[#1a1c1a] placeholder:text-[#727973]/40 focus:outline-none focus:border-[#456551] focus:ring-4 focus:ring-[#456551]/10 transition-all duration-300 shadow-sm"
+                            />
+                          </motion.div>
+                        )}
+                      </>
+                    )}
                   </div>
                 )}
               </motion.div>
@@ -128,7 +165,7 @@ export default function QuizPage() {
         </div>
       </div>
 
-      <div className="w-full max-w-2xl mx-auto px-6 pb-8 flex items-center justify-between gap-4">
+      <div className="w-full max-w-2xl mx-auto px-4 sm:px-6 pb-6 sm:pb-8 flex items-center justify-between gap-3 sm:gap-4">
         <motion.button onClick={goPrev} disabled={current === 0} className="px-5 py-3 rounded-xl font-semibold text-sm text-[#424843] border border-[#c2c8c1]/40 hover:bg-white/50 transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-2" whileHover={current > 0 ? { scale: 1.02 } : {}} whileTap={current > 0 ? { scale: 0.98 } : {}}>
           <span className="material-symbols-outlined text-[18px]">arrow_back</span>Sebelumnya
         </motion.button>

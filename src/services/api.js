@@ -65,9 +65,18 @@ export const QuizAPI = {
           data: {
             questions: [
               {
-                id: 'q4', field: 'years_experience', type: 'number',
+                id: 'q4', field: 'years_experience', type: 'choice',
                 text_id: "Sudah berapa tahun kamu bekerja (total pengalaman kerja)?",
-                placeholder_id: "Masukkan angka dalam tahun (contoh: 3)"
+                options: [
+                  { value: 1, label_id: "1 tahun" },
+                  { value: 2, label_id: "2 tahun" },
+                  { value: 3, label_id: "3 tahun" },
+                  { value: 5, label_id: "5 tahun" },
+                  { value: 7, label_id: "7 tahun" },
+                  { value: 10, label_id: "10 tahun" }
+                ],
+                allowCustom: true,
+                customPlaceholder: "Masukkan jumlah tahun (contoh: 4)"
               },
               {
                 id: 'q5', field: 'work_hours_per_week', type: 'choice',
@@ -125,24 +134,42 @@ export const QuizAPI = {
                 ]
               },
               {
-                id: 'q10', field: 'sleep_hours', type: 'number',
+                id: 'q10', field: 'sleep_hours', type: 'choice',
                 text_id: "Berapa rata-rata jam tidur per hari dalam 1 minggu terakhir?",
-                placeholder_id: "Masukkan angka dalam jam (contoh: 6)"
+                options: [
+                  { value: 4, label_id: "4 jam" },
+                  { value: 5, label_id: "5 jam" },
+                  { value: 6, label_id: "6 jam" },
+                  { value: 7, label_id: "7 jam" },
+                  { value: 8, label_id: "8 jam" },
+                  { value: 9, label_id: "9 jam" }
+                ],
+                allowCustom: true,
+                customPlaceholder: "Masukkan jam tidur (contoh: 6.5)"
               },
               {
-                id: 'q11', field: 'physical_activity_hrs', type: 'number',
+                id: 'q11', field: 'physical_activity_hrs', type: 'choice',
                 text_id: "Berapa rata-rata waktu aktivitas fisik per minggu?",
-                placeholder_id: "Masukkan angka dalam jam (contoh: 2)"
+                options: [
+                  { value: 0, label_id: "Tidak ada (0 jam)" },
+                  { value: 1, label_id: "1 jam" },
+                  { value: 2, label_id: "2 jam" },
+                  { value: 3, label_id: "3 jam" },
+                  { value: 5, label_id: "5 jam" },
+                  { value: 7, label_id: "7 jam atau lebih" }
+                ],
+                allowCustom: true,
+                customPlaceholder: "Masukkan jam aktivitas (contoh: 1.5)"
               },
               {
                 id: 'q12', field: 'manager_support', type: 'choice',
                 text_id: "Seberapa besar dukungan dari atasan/manajer kamu?",
                 options: [
-                  { value: 1, label_id: "Tidak ada (1-2)" },
-                  { value: 2, label_id: "Rendah (3-4)" },
-                  { value: 3, label_id: "Cukup (5-6)" },
-                  { value: 4, label_id: "Baik (7-8)" },
-                  { value: 5, label_id: "Sangat baik (9-10)" }
+                  { value: 1, label_id: "Tidak ada (1)" },
+                  { value: 2, label_id: "Rendah (2)" },
+                  { value: 3, label_id: "Cukup (3)" },
+                  { value: 4, label_id: "Baik (4)" },
+                  { value: 5, label_id: "Sangat baik (5)" }
                 ]
               },
               {

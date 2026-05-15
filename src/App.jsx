@@ -2,8 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import StartMenu from './pages/StartMenu';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
+import AuthPage from './pages/AuthPage';
 import QuizPage from './pages/QuizPage';
 import ResultPage from './pages/ResultPage';
 import HistoryPage from './pages/HistoryPage';
@@ -18,12 +17,17 @@ function ProtectedRoute({ children }) {
 
 function AnimatedRoutes() {
   const location = useLocation();
+  
+  // Untuk login/register, gunakan key yang sama supaya gak trigger page transition
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
+  const routeKey = isAuthPage ? 'auth' : location.pathname;
+
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
+      <Routes location={location} key={routeKey}>
         <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<AuthPage />} />
+        <Route path="/register" element={<AuthPage />} />
 
         {/* Halaman butuh login */}
         <Route path="/start" element={<ProtectedRoute><StartMenu /></ProtectedRoute>} />
