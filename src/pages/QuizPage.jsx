@@ -40,20 +40,21 @@ export default function QuizPage() {
     setSubmitting(true);
     try {
       const payload = {
+        years_experience: parseInt(localStorage.getItem('bs_years_experience')) || 0,
         work_hours_per_week: parseInt(answers.work_hours_per_week) || 40,
-        remote_ratio: answers.remote_ratio || 'Hybrid',
+        remote_ratio: answers.remote_ratio || '',
         satisfaction_score: parseInt(answers.satisfaction_score) || 3,
         stress_score: parseInt(answers.stress_score) || 5,
         work_life_balance: parseInt(answers.work_life_balance) || 5,
         sleep_hours: parseFloat(answers.sleep_hours) || 7,
         physical_activity_hrs: parseFloat(answers.physical_activity_hrs) || 1,
         manager_support: parseInt(answers.manager_support) || 3,
-        has_mental_health_support: parseInt(answers.has_mental_health_support) || 3,
+        has_mental_health_support: answers.has_mental_health_support ?? false,
+        burnout_class: answers.burnout_class || '',
+        source: answers.source || '',
       };
       const res = await QuizAPI.submitResult(payload);
-      // Backend returns { status, message: { result, data } }
-      const resultData = res.data.message?.result || res.data.message || res.data;
-      navigate('/result', { state: { result: resultData } });
+      navigate('/result', { state: { result: res.data } });
     } catch (err) {
       alert("Gagal mengirim. Silakan coba lagi.");
     } finally { setSubmitting(false); }
