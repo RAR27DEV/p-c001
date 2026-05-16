@@ -7,6 +7,8 @@ import heroImg from '../assets/illustrations/hero-dashboard.png';
 import quizImg from '../assets/illustrations/action-quiz.png';
 import scanImg from '../assets/illustrations/action-scan.png';
 import historyImg from '../assets/illustrations/action-history.png';
+import motivationQuoteImg from '../assets/illustrations/motivation-quote.png';
+import motivationFactImg from '../assets/illustrations/motivation-fact.png';
 
 export default function StartMenu() {
   const navigate = useNavigate();
@@ -201,73 +203,86 @@ export default function StartMenu() {
               <div className={`w-full h-full ${currentQuote.type === 'fakta' ? 'bg-[#006a6a]' : 'bg-[#456551]'}`} />
             </motion.div>
 
-            <div className="relative z-10 flex flex-col items-center text-center px-2 sm:px-8 max-w-2xl mx-auto">
-              {/* Type badge */}
-              <motion.span
-                key={`badge-${quoteIndex}`}
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase mb-4 ${
-                  currentQuote.type === 'fakta'
-                    ? 'bg-[#9deded]/20 text-[#006a6a]'
-                    : 'bg-[#c7ebd1]/30 text-[#456551]'
-                }`}
-              >
-                <span className="material-symbols-outlined text-[12px]">
-                  {currentQuote.type === 'fakta' ? 'science' : 'favorite'}
-                </span>
-                {currentQuote.type === 'fakta' ? 'Fakta Burnout' : 'Motivasi'}
-              </motion.span>
-
-              {/* Quote icon */}
-              <span className="material-symbols-outlined filled text-3xl sm:text-4xl text-[#7c9e87]/30 mb-3">format_quote</span>
-
-              {/* Animated quote text */}
-              <div className="min-h-[80px] sm:min-h-[100px] flex items-center justify-center">
-                <AnimatePresence mode="wait">
-                  <motion.p
-                    key={quoteIndex}
-                    initial={{ opacity: 0, y: 12, filter: 'blur(4px)' }}
-                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                    exit={{ opacity: 0, y: -12, filter: 'blur(4px)' }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="text-[18px] sm:text-[22px] md:text-[24px] leading-[1.4] font-medium text-[#1a1c1a]"
-                    style={{ fontFamily: "'Newsreader', serif" }}
-                  >
-                    {currentQuote.text}
-                  </motion.p>
-                </AnimatePresence>
+            <div className="relative z-10 flex items-center gap-6 lg:gap-10">
+              {/* Left illustration */}
+              <div className="hidden md:block flex-shrink-0 w-28 lg:w-36">
+                <img src={motivationQuoteImg} alt="" className="w-full h-auto object-contain opacity-80" />
               </div>
 
-              {/* Author */}
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={`author-${quoteIndex}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+              {/* Center content */}
+              <div className="flex-1 flex flex-col items-center text-center px-2 sm:px-4">
+                {/* Type badge */}
+                <motion.span
+                  key={`badge-${quoteIndex}`}
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3, delay: 0.2 }}
-                  className="font-semibold text-xs sm:text-sm tracking-[0.05em] text-[#727973] mt-4"
+                  transition={{ duration: 0.3 }}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase mb-4 ${
+                    currentQuote.type === 'fakta'
+                      ? 'bg-[#9deded]/20 text-[#006a6a]'
+                      : 'bg-[#c7ebd1]/30 text-[#456551]'
+                  }`}
                 >
-                  {currentQuote.author}
-                </motion.p>
-              </AnimatePresence>
+                  <span className="material-symbols-outlined text-[12px]">
+                    {currentQuote.type === 'fakta' ? 'science' : 'favorite'}
+                  </span>
+                  {currentQuote.type === 'fakta' ? 'Fakta Burnout' : 'Motivasi'}
+                </motion.span>
 
-              {/* Dot indicators */}
-              <div className="flex items-center gap-1.5 mt-5">
-                {quotes.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setQuoteIndex(idx)}
-                    className={`rounded-full transition-all duration-300 ${
-                      idx === quoteIndex
-                        ? 'w-6 h-2 bg-[#456551]'
-                        : 'w-2 h-2 bg-[#c2c8c1]/50 hover:bg-[#7c9e87]/50'
-                    }`}
-                  />
-                ))}
+                {/* Quote icon */}
+                <span className="material-symbols-outlined filled text-3xl sm:text-4xl text-[#7c9e87]/30 mb-3">format_quote</span>
+
+                {/* Animated quote text */}
+                <div className="min-h-[80px] sm:min-h-[100px] flex items-center justify-center">
+                  <AnimatePresence mode="wait">
+                    <motion.p
+                      key={quoteIndex}
+                      initial={{ opacity: 0, y: 12, filter: 'blur(4px)' }}
+                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                      exit={{ opacity: 0, y: -12, filter: 'blur(4px)' }}
+                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      className="text-[18px] sm:text-[22px] md:text-[24px] leading-[1.4] font-medium text-[#1a1c1a]"
+                      style={{ fontFamily: "'Newsreader', serif" }}
+                    >
+                      {currentQuote.text}
+                    </motion.p>
+                  </AnimatePresence>
+                </div>
+
+                {/* Author */}
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={`author-${quoteIndex}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3, delay: 0.2 }}
+                    className="font-semibold text-xs sm:text-sm tracking-[0.05em] text-[#727973] mt-4"
+                  >
+                    {currentQuote.author}
+                  </motion.p>
+                </AnimatePresence>
+
+                {/* Dot indicators */}
+                <div className="flex items-center gap-1.5 mt-5">
+                  {quotes.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setQuoteIndex(idx)}
+                      className={`rounded-full transition-all duration-300 ${
+                        idx === quoteIndex
+                          ? 'w-6 h-2 bg-[#456551]'
+                          : 'w-2 h-2 bg-[#c2c8c1]/50 hover:bg-[#7c9e87]/50'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Right illustration */}
+              <div className="hidden md:block flex-shrink-0 w-28 lg:w-36">
+                <img src={motivationFactImg} alt="" className="w-full h-auto object-contain opacity-80" />
               </div>
             </div>
           </div>
