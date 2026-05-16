@@ -65,20 +65,6 @@ export const QuizAPI = {
           data: {
             questions: [
               {
-                id: 'q4', field: 'years_experience', type: 'choice',
-                text_id: "Sudah berapa tahun kamu bekerja (total pengalaman kerja)?",
-                options: [
-                  { value: 1, label_id: "1 tahun" },
-                  { value: 2, label_id: "2 tahun" },
-                  { value: 3, label_id: "3 tahun" },
-                  { value: 5, label_id: "5 tahun" },
-                  { value: 7, label_id: "7 tahun" },
-                  { value: 10, label_id: "10 tahun" }
-                ],
-                allowCustom: true,
-                customPlaceholder: "Masukkan jumlah tahun (contoh: 4)"
-              },
-              {
                 id: 'q5', field: 'work_hours_per_week', type: 'choice',
                 text_id: "Rata-rata, berapa jam kamu bekerja dalam seminggu?",
                 options: [

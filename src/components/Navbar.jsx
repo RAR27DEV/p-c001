@@ -52,6 +52,9 @@ export default function Navbar() {
                 <button onClick={() => { navigate('/start'); setShowMenu(false); }} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-[#424843] hover:bg-[#f4f4f0] transition-colors">
                   <span className="material-symbols-outlined text-[18px]">dashboard</span>Dashboard
                 </button>
+                <button onClick={() => { navigate('/profile'); setShowMenu(false); }} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-[#424843] hover:bg-[#f4f4f0] transition-colors">
+                  <span className="material-symbols-outlined text-[18px]">settings</span>Profil
+                </button>
                 <button onClick={() => { navigate('/history'); setShowMenu(false); }} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-[#424843] hover:bg-[#f4f4f0] transition-colors">
                   <span className="material-symbols-outlined text-[18px]">history</span>Riwayat
                 </button>

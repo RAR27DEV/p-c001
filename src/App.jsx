@@ -7,6 +7,7 @@ import QuizPage from './pages/QuizPage';
 import ResultPage from './pages/ResultPage';
 import HistoryPage from './pages/HistoryPage';
 import ScanPage from './pages/ScanPage';
+import ProfilePage from './pages/ProfilePage';
 
 // Auth guard — redirect ke login kalau belum login
 function ProtectedRoute({ children }) {
@@ -35,6 +36,7 @@ function AnimatedRoutes() {
         <Route path="/scan" element={<ProtectedRoute><ScanPage /></ProtectedRoute>} />
         <Route path="/result" element={<ProtectedRoute><ResultPage /></ProtectedRoute>} />
         <Route path="/history" element={<ProtectedRoute><HistoryPage /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
 
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

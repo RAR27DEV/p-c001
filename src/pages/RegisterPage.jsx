@@ -24,13 +24,15 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
-  const [form, setForm] = useState({ username: '', password: '', age: '', gender: '', job_role: '' });
+  const [form, setForm] = useState({ username: '', password: '', age: '', gender: '', job_role: '', years_experience: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [customAge, setCustomAge] = useState(false);
   const [customJobRole, setCustomJobRole] = useState(false);
+  const [customExperience, setCustomExperience] = useState(false);
 
   const ageOptions = [18, 21, 25, 30, 35, 40, 45, 50];
+  const experienceOptions = [1, 2, 3, 5];
 
   const genderOptions = [
     { value: 'Laki-laki', label: 'Laki-laki', icon: 'man' },
@@ -59,6 +61,7 @@ export default function RegisterPage() {
     if (!form.age || parseInt(form.age) < 1) e.age = 'Usia harus valid';
     if (!form.gender) e.gender = 'Pilih jenis kelamin';
     if (!form.job_role) e.job_role = 'Pilih peran pekerjaan';
+    if (!form.years_experience || parseInt(form.years_experience) < 0) e.years_experience = 'Pengalaman kerja harus valid';
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -73,6 +76,7 @@ export default function RegisterPage() {
     try {
       await AuthAPI.register(form.username, form.password, parseInt(form.age), form.gender, form.job_role);
       await AuthAPI.login(form.username, form.password);
+      localStorage.setItem('bs_years_experience', form.years_experience);
       navigate('/start');
     } catch (err) {
       alert(err?.response?.data?.message || "Pendaftaran gagal.");
@@ -245,6 +249,37 @@ export default function RegisterPage() {
                     )}
                   </AnimatePresence>
                   {errors.job_role && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-[#ba1a1a] mt-1 ml-1">{errors.job_role}</motion.p>}
+                </div>
+
+                {/* Pengalaman Kerja */}
+                <div>
+                  <label className="block font-semibold text-sm tracking-[0.05em] text-[#1a1c1a] mb-2 ml-1 flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[16px] text-[#456551]">trending_up</span>Pengalaman Kerja (tahun)
+                  </label>
+                  <div className="grid grid-cols-4 gap-2">
+                    {experienceOptions.map((yr) => {
+                      const isSelected = !customExperience && parseInt(form.years_experience) === yr;
+                      return (
+                        <motion.button key={yr} type="button" onClick={() => { setForm({ ...form, years_experience: String(yr) }); setCustomExperience(false); }} className={`py-2 sm:py-2.5 rounded-xl border-2 font-semibold text-xs sm:text-sm transition-all duration-200 ${isSelected ? 'bg-[#456551] text-white border-[#456551] shadow-md' : 'bg-white/60 text-[#1a1c1a] border-[#c2c8c1]/30 hover:border-[#7c9e87] hover:bg-white'}`} whileTap={{ scale: 0.93 }}>
+                          {yr}
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                  <motion.button type="button" onClick={() => { setCustomExperience(true); setForm({ ...form, years_experience: '' }); }} className={`mt-2 w-full py-2 sm:py-2.5 rounded-xl border-2 border-dashed font-medium text-xs sm:text-sm flex items-center justify-center gap-2 transition-all ${customExperience ? 'bg-[#456551] text-white border-[#456551]' : 'bg-white/40 text-[#456551] border-[#7c9e87]/50 hover:border-[#456551]'}`} whileTap={{ scale: 0.98 }}>
+                    <span className="material-symbols-outlined text-[16px]">edit</span>Lainnya (isi manual)
+                  </motion.button>
+                  <AnimatePresence>
+                    {customExperience && (
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mt-2 overflow-hidden">
+                        <div className="relative group">
+                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#727973]/60 group-focus-within:text-[#456551] transition-colors">tag</span>
+                          <input type="number" min="0" max="50" autoFocus placeholder="Jumlah tahun (contoh: 4)" value={form.years_experience} onChange={e => setForm({ ...form, years_experience: e.target.value })} className={inputClass} />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  {errors.years_experience && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-[#ba1a1a] mt-1 ml-1">{errors.years_experience}</motion.p>}
                 </div>
               </motion.div>
             )}

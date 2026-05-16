@@ -40,7 +40,7 @@ export default function QuizPage() {
     setSubmitting(true);
     try {
       const payload = {
-        years_experience: parseInt(answers.years_experience) || 0,
+        years_experience: parseInt(localStorage.getItem('bs_years_experience')) || 0,
         work_hours_per_week: parseInt(answers.work_hours_per_week) || 40,
         remote_ratio: answers.remote_ratio || '',
         satisfaction_score: parseInt(answers.satisfaction_score) || 3,
