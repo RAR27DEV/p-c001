@@ -5,6 +5,7 @@ import { HistoryAPI } from '../services/api';
 import Navbar from '../components/Navbar';
 import HistoryCard from '../components/HistoryCard';
 import { PageTransition, FadeInView, HoverCard } from '../components/PageTransition';
+import emptyImg from '../assets/illustrations/mental-health-1.png';
 
 export default function HistoryPage() {
   const navigate = useNavigate();
@@ -81,19 +82,19 @@ export default function HistoryPage() {
         {/* Stat Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { icon: 'assignment_turned_in', label: "Total Pemeriksaan", value: totalChecks, color: 'text-[#15803d]', bg: 'bg-white', iconBg: 'bg-green-50' },
-            { icon: 'description', label: "Kuis", value: `${quizCount}x`, color: 'text-[#15803d]', bg: 'bg-white', iconBg: 'bg-green-50' },
-            { icon: 'photo_camera', label: "Scan", value: `${scanCount}x`, color: 'text-cyan-600', bg: 'bg-white', iconBg: 'bg-cyan-50' },
-            { icon: 'favorite', label: "Tingkat Sehat", value: `${healthyPercent}%`, color: 'text-[#15803d]', bg: 'bg-white', iconBg: 'bg-green-50' },
+            { icon: 'assignment_turned_in', label: "Total Pemeriksaan", value: totalChecks, color: 'text-[#15803d]', bg: 'bg-green-50', iconBg: 'bg-green-100' },
+            { icon: 'description', label: "Kuis", value: `${quizCount}x`, color: 'text-gray-700', bg: 'bg-white', iconBg: 'bg-gray-100' },
+            { icon: 'photo_camera', label: "Scan", value: `${scanCount}x`, color: 'text-cyan-700', bg: 'bg-cyan-50', iconBg: 'bg-cyan-100' },
+            { icon: 'favorite', label: "Tingkat Sehat", value: `${healthyPercent}%`, color: 'text-gray-700', bg: 'bg-rose-50', iconBg: 'bg-rose-100' },
           ].map((stat, idx) => (
             <FadeInView key={idx} delay={0.05 + idx * 0.08}>
               <HoverCard>
-                <div className={`${stat.bg} rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-3 h-full`}>
+                <div className={`${stat.bg} rounded-2xl p-5 border border-gray-100 flex flex-col gap-3 h-full`}>
                   <div className={`w-10 h-10 ${stat.iconBg} rounded-xl flex items-center justify-center`}>
                     <span className={`material-symbols-outlined ${stat.color} text-[20px]`}>{stat.icon}</span>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-gray-500 tracking-[0.05em] uppercase mb-1">{stat.label}</p>
+                    <p className="text-[10px] sm:text-xs font-semibold text-gray-500 tracking-[0.05em] uppercase mb-1">{stat.label}</p>
                     <p className={`text-[24px] font-bold ${stat.color} leading-tight`} style={{ fontFamily: "'Newsreader', serif" }}>{stat.value}</p>
                   </div>
                 </div>
@@ -139,24 +140,28 @@ export default function HistoryPage() {
             </div>
           ) : filteredHistory.length === 0 ? (
             <FadeInView delay={0.2}>
-              <div className="relative rounded-3xl overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#c7ebd1]/20 via-[#faf9f6] to-[#9deded]/10" />
-                <div className="relative flex flex-col justify-center items-center text-center gap-5 py-20 px-8">
-                  <motion.div className="w-20 h-20 rounded-full bg-[#c7ebd1]/30 flex items-center justify-center border border-[#7c9e87]/20" animate={{ y: [0, -8, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}>
-                    <span className="material-symbols-outlined text-[#7c9e87] text-[36px]">spa</span>
-                  </motion.div>
+              <div className="bg-green-50/50 rounded-3xl border border-gray-100">
+                <div className="flex flex-col justify-center items-center text-center gap-4 py-16 px-8">
+                  <motion.img
+                    src={emptyImg}
+                    alt="Empty state illustration"
+                    className="w-36 h-36 sm:w-44 sm:h-44 object-contain"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                  />
                   <div>
-                    <h3 className="text-[24px] font-medium text-[#1a1c1a] mb-2" style={{ fontFamily: "'Newsreader', serif" }}>
+                    <h3 className="text-[22px] sm:text-[24px] font-bold text-gray-900 mb-2" style={{ fontFamily: "'Newsreader', serif" }}>
                       {activeFilter !== 'all'
                         ? `Belum ada catatan ${activeFilter === 'quiz' ? 'kuis' : 'scan'}`
                         : "Ceritamu Dimulai di Sini"}
                     </h3>
-                    <p className="text-[15px] text-[#424843] max-w-sm mx-auto leading-relaxed">
-                      {"Mulai pemeriksaan pertamamu hari ini."}
+                    <p className="text-[14px] sm:text-[15px] text-gray-500 max-w-sm mx-auto leading-relaxed">
+                      Mulai pemeriksaan pertamamu hari ini untuk melihat riwayat perjalanan kesehatan mentalmu di sini.
                     </p>
                   </div>
-                  <motion.button onClick={() => navigate('/start')} className="mt-2 px-8 py-3 rounded-full bg-[#456551] text-white font-semibold text-sm tracking-[0.05em] shadow-md flex items-center gap-2" whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
-                    <span className="material-symbols-outlined text-[18px]">play_arrow</span>{"Mulai Pemeriksaan"}
+                  <motion.button onClick={() => navigate('/start')} className="mt-2 px-8 py-3 rounded-full bg-[#166534] text-white font-semibold text-sm shadow-sm flex items-center gap-2" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                    <span className="material-symbols-outlined text-[18px]">play_arrow</span>Mulai Pemeriksaan
                   </motion.button>
                 </div>
               </div>
