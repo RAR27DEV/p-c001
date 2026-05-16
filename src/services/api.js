@@ -82,11 +82,11 @@ export const QuizAPI = {
                 id: 'q5', field: 'work_hours_per_week', type: 'choice',
                 text_id: "Rata-rata, berapa jam kamu bekerja dalam seminggu?",
                 options: [
-                  { value: "< 30 jam", label_id: "Kurang dari 30 jam" },
-                  { value: "30-40 jam", label_id: "30-40 jam" },
-                  { value: "41-50 jam", label_id: "41-50 jam" },
-                  { value: "51-60 jam", label_id: "51-60 jam" },
-                  { value: "> 60 jam", label_id: "Lebih dari 60 jam" }
+                  { value: 25, label_id: "Kurang dari 30 jam" },
+                  { value: 35, label_id: "30-40 jam" },
+                  { value: 45, label_id: "41-50 jam" },
+                  { value: 55, label_id: "51-60 jam" },
+                  { value: 65, label_id: "Lebih dari 60 jam" }
                 ]
               },
               {
