@@ -291,7 +291,7 @@ export default function StartMenu() {
 
       {/* Footer */}
       <FadeInView>
-        <footer className="w-full mt-16 sm:mt-20 bg-gradient-to-b from-[#faf9f6] to-[#eef6f0]">
+        <footer className="w-full mt-16 sm:mt-20">
           <div className="max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8">
             {/* Divider */}
             <div className="w-full h-px bg-gradient-to-r from-transparent via-[#7c9e87]/30 to-transparent" />

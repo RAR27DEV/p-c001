@@ -48,10 +48,10 @@ export default function HistoryPage() {
   ];
 
   return (
-    <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col relative" style={{ fontFamily: "'Manrope', sans-serif" }}>
+    <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col relative overflow-x-hidden" style={{ fontFamily: "'Manrope', sans-serif" }}>
 
       {/* Ambient Background */}
-      <div className="fixed inset-0 z-[-1] pointer-events-none">
+      <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
         <motion.div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#abcfb6]/20 blur-[120px]" animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 16, repeat: Infinity }} />
         <motion.div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#84d4d4]/12 blur-[150px]" animate={{ scale: [1.1, 1, 1.1] }} transition={{ duration: 20, repeat: Infinity }} />
       </div>
@@ -226,7 +226,7 @@ export default function HistoryPage() {
 
       {/* Footer */}
       <FadeInView>
-        <footer className="w-full mt-12 sm:mt-16 bg-gradient-to-b from-[#faf9f6] to-[#eef6f0]">
+        <footer className="w-full mt-12 sm:mt-16">
           <div className="max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8">
             <div className="w-full h-px bg-gradient-to-r from-transparent via-[#7c9e87]/30 to-transparent" />
             <div className="py-10 sm:py-14 flex flex-col items-center gap-6">
@@ -234,14 +234,14 @@ export default function HistoryPage() {
                 <span className="material-symbols-outlined filled text-[#7c9e87] text-[28px]">spa</span>
                 <span className="text-[22px] font-semibold text-[#456551] tracking-tight" style={{ fontFamily: "'Newsreader', serif" }}>BurnoutSense</span>
               </div>
-              <p className="text-[14px] text-[#727973] text-center max-w-md leading-relaxed">
+              <p className="text-[14px] text-gray-500 text-center max-w-md leading-relaxed">
                 Ruang tenang untuk memahami dirimu. Deteksi burnout lebih awal, pulih lebih cepat.
               </p>
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#c7ebd1]/20 border border-[#7c9e87]/10">
                 <span className="material-symbols-outlined text-[14px] text-[#7c9e87]">info</span>
-                <span className="text-[11px] sm:text-[12px] text-[#727973]">Bukan pengganti diagnosis profesional</span>
+                <span className="text-[11px] sm:text-[12px] text-gray-500">Bukan pengganti diagnosis profesional</span>
               </div>
-              <p className="text-[12px] text-[#727973]/60 mt-2">© 2025 BurnoutSense · Capstone Project</p>
+              <p className="text-[12px] text-gray-400 mt-2">© 2025 BurnoutSense · Capstone Project</p>
             </div>
           </div>
         </footer>
