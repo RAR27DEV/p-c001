@@ -86,7 +86,7 @@ export default function RegisterPage() {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="p-6 sm:p-8 md:p-10 rounded-[24px] sm:rounded-[32px] bg-white/60 backdrop-blur-[20px] border border-white/50 shadow-[0_24px_60px_rgba(124,158,135,0.08)]"
+      className="p-6 sm:p-8 md:p-10 rounded-3xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
     >
         {/* Logo mobile */}
         <motion.div variants={itemVariants} className="flex lg:hidden justify-center items-center gap-2 mb-6">
@@ -122,12 +122,12 @@ export default function RegisterPage() {
         </motion.div>
 
         {/* Tab Masuk / Daftar */}
-        <motion.div variants={itemVariants} className="flex p-1.5 bg-[#f4f4f0]/50 backdrop-blur-sm rounded-xl mb-5 border border-white/20 shadow-inner">
-          <button onClick={() => navigate('/login')} className="w-1/2 py-2.5 rounded-lg text-[#424843] hover:text-[#456551] font-semibold text-sm tracking-[0.05em] transition-all flex items-center justify-center gap-2 hover:bg-white/30">
+        <motion.div variants={itemVariants} className="flex p-1 bg-gray-50 rounded-2xl mb-5 sm:mb-6">
+          <button onClick={() => navigate('/login')} className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium text-gray-500 hover:text-gray-800 transition-all">
             <span className="material-symbols-outlined text-[18px]">login</span>Masuk
           </button>
-          <button className="w-1/2 py-2.5 rounded-lg bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-[#456551] font-semibold text-sm tracking-[0.05em] transition-all flex items-center justify-center gap-2">
-            <span className="material-symbols-outlined text-[18px]">person_add</span>Daftar
+          <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-white rounded-xl shadow-sm text-sm font-medium text-gray-800 transition-all">
+            <span className="material-symbols-outlined text-[18px] text-[#456551]">person_add</span>Daftar
           </button>
         </motion.div>
 

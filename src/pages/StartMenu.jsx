@@ -101,20 +101,19 @@ export default function StartMenu() {
 
         {/* Hero Section */}
         <motion.section
-          className="mt-6 sm:mt-8 relative rounded-xl overflow-hidden min-h-[280px] sm:min-h-[420px] flex items-center p-5 sm:p-8 md:p-16"
+          className="mt-4 sm:mt-6 relative rounded-3xl overflow-hidden min-h-[280px] sm:min-h-[400px] flex items-center p-5 sm:p-8 lg:p-16"
           initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="absolute inset-0 z-0">
-            <div className="w-full h-full bg-gradient-to-br from-[#e8f5ec] via-[#d4ede0] to-[#b8e0cc]" />
-            <svg className="absolute inset-0 w-full h-full opacity-[0.07]" viewBox="0 0 1200 500" fill="none">
-              <path d="M0 500 L100 200 L200 500Z" fill="#456551" /><path d="M150 500 L300 150 L450 500Z" fill="#456551" />
-              <path d="M350 500 L500 100 L650 500Z" fill="#456551" /><path d="M600 500 L750 180 L900 500Z" fill="#456551" />
-              <path d="M800 500 L950 120 L1100 500Z" fill="#456551" /><path d="M1000 500 L1150 160 L1200 500Z" fill="#456551" />
-            </svg>
-            <div className="absolute inset-0 bg-gradient-to-r from-white/60 via-white/30 to-transparent" />
+            <div className="w-full h-full bg-gradient-to-r from-[#dcfce7] to-[#86efac]" />
+            <div className="absolute inset-0 opacity-30 pointer-events-none">
+              <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 400">
+                <path d="M0,400 L0,200 L150,100 L300,300 L450,150 L600,350 L750,200 L900,300 L1000,100 L1000,400 Z" fill="rgba(255,255,255,0.4)" />
+              </svg>
+            </div>
           </div>
 
-          <motion.div className="relative z-10 bg-white/70 backdrop-blur-md p-6 sm:p-10 md:p-12 rounded-2xl max-w-2xl border border-white/80 shadow-[0_8px_32px_rgba(69,101,81,0.08)]" initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
+          <motion.div className="relative z-10 bg-white/90 backdrop-blur-sm p-6 sm:p-10 md:p-12 rounded-2xl max-w-2xl border border-white/50 shadow-sm" initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
             <motion.p className="font-semibold text-xs sm:text-sm tracking-[0.05em] text-[#7c9e87] mb-3 sm:mb-4 uppercase flex items-center gap-2" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
               <span className="material-symbols-outlined text-[16px]">waving_hand</span>
               {getGreeting()}
@@ -139,37 +138,34 @@ export default function StartMenu() {
             </p>
           </FadeInView>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {actionButtons.map((btn, idx) => (
               <FadeInView key={idx} delay={idx * 0.1}>
                 <HoverCard className="h-full">
                   <motion.div
                     onClick={() => navigate(btn.route)}
-                    className="relative p-6 sm:p-7 rounded-2xl flex flex-col h-full cursor-pointer group border-2 border-[#c2c8c1]/30 bg-white/80 backdrop-blur-sm hover:border-[#456551]/40 hover:shadow-[0_12px_32px_rgba(69,101,81,0.12)] transition-all duration-300 overflow-hidden"
+                    className="relative p-8 rounded-2xl flex flex-col h-full cursor-pointer group bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
                     whileTap={{ scale: 0.97 }}
                   >
-                    {/* Hover gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#c7ebd1]/0 to-[#456551]/0 group-hover:from-[#c7ebd1]/10 group-hover:to-[#456551]/5 transition-all duration-500 rounded-2xl" />
-                    
                     {btn.badge && (
-                      <div className="absolute top-3 right-3 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider bg-gradient-to-r from-[#456551] to-[#006a6a] shadow-sm">{btn.badge}</div>
+                      <div className="absolute top-6 right-6 text-white text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider bg-[#14532d]">{btn.badge}</div>
                     )}
                     <motion.div
-                      className={`relative z-10 w-14 h-14 rounded-2xl ${btn.iconBg} flex items-center justify-center mb-5 border border-white/60 shadow-sm`}
-                      whileHover={{ rotate: 8, scale: 1.1 }}
+                      className={`relative z-10 w-14 h-14 rounded-full ${btn.iconBg} flex items-center justify-center mb-6`}
+                      whileHover={{ scale: 1.1 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <span className={`material-symbols-outlined filled ${btn.iconColor} text-[26px]`}>{btn.icon}</span>
+                      <span className={`material-symbols-outlined filled ${btn.iconColor} text-[24px]`}>{btn.icon}</span>
                     </motion.div>
-                    <h3 className="relative z-10 text-[18px] sm:text-[20px] leading-[1.3] font-semibold text-[#1a1c1a] mb-2" style={{ fontFamily: "'Newsreader', serif" }}>
+                    <h3 className="relative z-10 text-[18px] sm:text-[20px] leading-[1.3] font-bold text-[#1a1c1a] mb-3" style={{ fontFamily: "'Newsreader', serif" }}>
                       {btn.title}
                     </h3>
-                    <p className="relative z-10 text-[13px] sm:text-[14px] leading-[1.6] text-[#424843] flex-1">{btn.desc}</p>
+                    <p className="relative z-10 text-[13px] sm:text-[14px] leading-[1.6] text-gray-500 flex-1 mb-8">{btn.desc}</p>
                     
-                    {/* CTA button */}
-                    <div className="relative z-10 mt-5 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#456551]/8 group-hover:bg-[#456551] text-[#456551] group-hover:text-white font-semibold text-sm transition-all duration-300 w-fit">
+                    {/* CTA button — pill style */}
+                    <div className="relative z-10 flex items-center gap-2 px-5 py-2.5 rounded-full bg-gray-50 text-gray-700 font-medium text-sm hover:bg-gray-100 transition-colors w-fit">
                       <span>Mulai</span>
-                      <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform duration-300">arrow_forward</span>
+                      <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
                     </div>
                   </motion.div>
                 </HoverCard>
@@ -180,7 +176,7 @@ export default function StartMenu() {
 
         {/* Kutipan — Carousel */}
         <FadeInView className="mt-16 sm:mt-20" delay={0.1}>
-          <div className="glass-card rounded-2xl p-6 sm:p-8 relative overflow-hidden border border-white/50">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 lg:p-12 relative overflow-hidden border border-gray-100 shadow-sm">
             {/* Background accent based on type */}
             <motion.div
               className="absolute inset-0 opacity-[0.04] pointer-events-none"

@@ -37,7 +37,7 @@ export default function LoginPage() {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="p-6 sm:p-8 md:p-10 rounded-[24px] sm:rounded-[32px] bg-white/60 backdrop-blur-[20px] border border-white/50 shadow-[0_24px_60px_rgba(124,158,135,0.08)]"
+      className="p-6 sm:p-8 md:p-10 rounded-3xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
     >
         {/* Logo mobile */}
         <motion.div variants={itemVariants} className="flex lg:hidden justify-center items-center gap-2 mb-6">
@@ -52,11 +52,11 @@ export default function LoginPage() {
         </motion.div>
 
         {/* Tab Masuk / Daftar */}
-        <motion.div variants={itemVariants} className="flex p-1.5 bg-[#f4f4f0]/50 backdrop-blur-sm rounded-xl mb-6 sm:mb-8 border border-white/20 shadow-inner">
-          <button className="w-1/2 py-2.5 rounded-lg bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-[#456551] font-semibold text-sm tracking-[0.05em] transition-all flex items-center justify-center gap-2">
-            <span className="material-symbols-outlined text-[18px]">login</span>Masuk
+        <motion.div variants={itemVariants} className="flex p-1 bg-gray-50 rounded-2xl mb-6 sm:mb-8">
+          <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-white rounded-xl shadow-sm text-sm font-medium text-gray-800 transition-all">
+            <span className="material-symbols-outlined text-[18px] text-[#456551]">login</span>Masuk
           </button>
-          <button onClick={() => navigate('/register')} className="w-1/2 py-2.5 rounded-lg text-[#424843] hover:text-[#456551] font-semibold text-sm tracking-[0.05em] transition-all flex items-center justify-center gap-2 hover:bg-white/30">
+          <button onClick={() => navigate('/register')} className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium text-gray-500 hover:text-gray-800 transition-all">
             <span className="material-symbols-outlined text-[18px]">person_add</span>Daftar
           </button>
         </motion.div>
@@ -67,7 +67,7 @@ export default function LoginPage() {
             <label className="block font-semibold text-sm tracking-[0.05em] text-[#1a1c1a] mb-1.5 ml-1">Nama Pengguna</label>
             <div className="relative group">
               <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#727973]/60 group-focus-within:text-[#456551] transition-colors duration-300">person</span>
-              <input type="text" placeholder="masukkan nama pengguna" value={form.username} onChange={e => setForm({...form, username: e.target.value})} required className="w-full pl-12 pr-4 py-3 sm:py-3.5 bg-white/50 border border-[#c2c8c1]/40 rounded-xl text-[15px] sm:text-[16px] leading-[1.6] text-[#1a1c1a] placeholder:text-[#727973]/50 focus:outline-none focus:border-[#456551]/50 focus:ring-4 focus:ring-[#456551]/10 transition-all duration-300 shadow-sm hover:border-[#c2c8c1] hover:shadow-md" />
+              <input type="text" placeholder="masukkan nama pengguna" value={form.username} onChange={e => setForm({...form, username: e.target.value})} required className="w-full pl-12 pr-4 py-3.5 bg-[#E8F0FE] border-transparent rounded-2xl text-sm text-[#1a1c1a] placeholder:text-gray-400 focus:bg-white focus:border-[#456551] focus:ring-2 focus:ring-[#456551]/20 transition-all shadow-sm" />
             </div>
           </motion.div>
 
@@ -75,7 +75,7 @@ export default function LoginPage() {
             <label className="block font-semibold text-sm tracking-[0.05em] text-[#1a1c1a] mb-1.5 ml-1">Kata Sandi</label>
             <div className="relative group">
               <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#727973]/60 group-focus-within:text-[#456551] transition-colors duration-300">lock</span>
-              <input type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={form.password} onChange={e => setForm({...form, password: e.target.value})} required className="w-full pl-12 pr-12 py-3 sm:py-3.5 bg-white/50 border border-[#c2c8c1]/40 rounded-xl text-[15px] sm:text-[16px] leading-[1.6] text-[#1a1c1a] placeholder:text-[#727973]/50 focus:outline-none focus:border-[#456551]/50 focus:ring-4 focus:ring-[#456551]/10 transition-all duration-300 shadow-sm hover:border-[#c2c8c1] hover:shadow-md" />
+              <input type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={form.password} onChange={e => setForm({...form, password: e.target.value})} required className="w-full pl-12 pr-12 py-3.5 bg-[#E8F0FE] border-transparent rounded-2xl text-sm text-[#1a1c1a] placeholder:text-gray-400 focus:bg-white focus:border-[#456551] focus:ring-2 focus:ring-[#456551]/20 transition-all shadow-sm tracking-widest" />
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#727973]/60 hover:text-[#1a1c1a] transition-colors duration-300">
                 <span className="material-symbols-outlined text-[20px]">{showPassword ? 'visibility' : 'visibility_off'}</span>
               </button>
@@ -86,7 +86,7 @@ export default function LoginPage() {
             variants={itemVariants}
             type="submit"
             disabled={loading}
-            className="w-full mt-6 sm:mt-8 py-3.5 sm:py-4 bg-[#456551] text-white rounded-xl font-semibold text-[15px] tracking-wide hover:bg-[#3a5745] hover:shadow-[0_12px_24px_rgba(69,101,81,0.25)] transition-all duration-300 ease-out flex justify-center items-center gap-2 group relative overflow-hidden disabled:opacity-70"
+            className="w-full mt-6 sm:mt-8 py-4 bg-[#456551] text-white rounded-2xl font-semibold text-sm tracking-wide hover:bg-[#456551]/90 transition-colors flex justify-center items-center gap-2 group disabled:opacity-70"
             whileTap={{ scale: 0.97 }}
             whileHover={{ scale: 1.01, y: -1 }}
           >
@@ -98,7 +98,6 @@ export default function LoginPage() {
                 <span className="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform duration-300">arrow_right_alt</span>
               </>
             )}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
           </motion.button>
         </form>
       </motion.div>

@@ -43,7 +43,7 @@ export default function AuthLayout({ children, mode = 'login' }) {
     <div className="h-screen flex flex-col lg:flex-row overflow-hidden bg-[#faf9f6] text-[#1a1c1a]" style={{ fontFamily: "'Manrope', sans-serif" }}>
       
       {/* Panel Kiri — hidden di mobile, TIDAK ikut animasi page transition */}
-      <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-10 xl:p-16 bg-[#e3e3df] overflow-hidden">
+      <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-10 xl:p-16 bg-[#E1EBE2] overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-br from-[#7c9e87]/30 to-[#faf9f6]/90 mix-blend-overlay" />
           <div className="absolute inset-0 bg-[#e3e3df]/40 backdrop-blur-[2px]" />
