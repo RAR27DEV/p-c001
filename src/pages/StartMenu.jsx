@@ -170,7 +170,7 @@ export default function StartMenu() {
                       <div className="absolute top-6 right-6 text-white text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider bg-[#14532d]">{btn.badge}</div>
                     )}
                     <div className="w-20 h-20 mb-6 group-hover:scale-110 transition-transform">
-                      <img src={btn.img} alt={btn.title} className="w-full h-full object-contain" />
+                      <img src={btn.img} alt={btn.title} className="w-full h-full object-contain mix-blend-multiply" />
                     </div>
                     <h3 className="relative z-10 text-[18px] sm:text-[20px] leading-[1.3] font-bold text-[#1a1c1a] mb-3" style={{ fontFamily: "'Newsreader', serif" }}>
                       {btn.title}
