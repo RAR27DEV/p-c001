@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
+import loginImg from '../assets/illustrations/login.png';
+import registerImg from '../assets/illustrations/register.png';
 
 // Kutipan motivasi burnout — berubah otomatis
 const quotes = [
@@ -11,17 +13,6 @@ const quotes = [
   { text: '"Meminta bantuan adalah tanda keberanian, bukan kelemahan."', sub: "Kamu tidak harus sendiri." },
   { text: '"Setiap napas dalam adalah langkah kecil menuju pemulihan."', sub: "Mulai dari yang sederhana." },
 ];
-
-// 2 pose: satu untuk login, satu untuk register
-const loginPose = {
-  body: "M140 280 C140 220 160 160 200 160 C240 160 260 220 260 280 C290 290 310 320 280 340 C240 340 160 340 120 340 C90 320 110 290 140 280 Z",
-  arms: ["M170 200 C150 240 130 250 110 240", "M230 200 C250 240 270 250 290 240"],
-};
-
-const registerPose = {
-  body: "M140 280 C140 220 160 160 200 160 C240 160 260 220 260 280 C290 290 310 320 280 340 C240 340 160 340 120 340 C90 320 110 290 140 280 Z",
-  arms: ["M170 180 C140 150 120 120 110 90", "M230 180 C260 150 280 120 290 90"],
-};
 
 export default function AuthLayout({ children, mode = 'login' }) {
   const location = useLocation();
@@ -36,7 +27,6 @@ export default function AuthLayout({ children, mode = 'login' }) {
   }, []);
 
   const currentQuote = quotes[quoteIndex];
-  const currentPose = mode === 'login' ? loginPose : registerPose;
   const isLogin = mode === 'login';
 
   return (
@@ -67,70 +57,20 @@ export default function AuthLayout({ children, mode = 'login' }) {
           <span className="text-[28px] text-[#424843] tracking-tight" style={{ fontFamily: "'Newsreader', serif" }}>BurnoutSense</span>
         </div>
 
-        {/* Ilustrasi — pose berubah hanya saat switch login/register */}
+        {/* Ilustrasi — berubah saat switch login/register */}
         <div className="relative z-10 flex-grow flex items-center justify-center my-8 xl:my-12">
-          <motion.svg
-            className="w-full max-w-[280px] xl:max-w-[320px] h-auto drop-shadow-xl"
-            fill="none"
-            viewBox="0 0 400 400"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Background glow */}
-            <circle cx="200" cy="180" fill="#c7ebd1" fillOpacity="0.3" r="140" className="blur-2xl" />
-            <circle cx="200" cy="180" fill="#abcfb6" fillOpacity="0.4" r="100" className="blur-xl" />
-
-            {/* Head */}
-            <motion.path
-              d="M200 120 C220 120 230 100 230 80 C230 60 215 45 200 45 C185 45 170 60 170 80 C170 100 180 120 200 120 Z"
-              fill="#7c9e87"
-              animate={{ y: [0, -3, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={mode}
+              src={mode === 'login' ? loginImg : registerImg}
+              alt="Character illustration"
+              className="max-w-[280px] xl:max-w-[340px] w-full h-auto object-contain drop-shadow-2xl"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             />
-
-            {/* Body — berubah saat mode switch */}
-            <motion.path
-              key={`body-${mode}`}
-              d={currentPose.body}
-              fill="#456551"
-              initial={{ opacity: 0.7, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1, y: [0, -3, 0] }}
-              transition={{ duration: 0.5, y: { duration: 4, repeat: Infinity, ease: 'easeInOut' } }}
-            />
-
-            {/* Arms — berubah saat mode switch */}
-            <motion.path
-              key={`arm-l-${mode}`}
-              d={currentPose.arms[0]}
-              stroke="#7c9e87"
-              strokeLinecap="round"
-              strokeWidth="10"
-              fill="none"
-              initial={{ opacity: 0, pathLength: 0 }}
-              animate={{ opacity: 1, pathLength: 1, rotate: [0, 2, 0] }}
-              transition={{ duration: 0.6, rotate: { duration: 5, repeat: Infinity, ease: 'easeInOut' } }}
-              style={{ transformOrigin: '170px 200px' }}
-            />
-            <motion.path
-              key={`arm-r-${mode}`}
-              d={currentPose.arms[1]}
-              stroke="#7c9e87"
-              strokeLinecap="round"
-              strokeWidth="10"
-              fill="none"
-              initial={{ opacity: 0, pathLength: 0 }}
-              animate={{ opacity: 1, pathLength: 1, rotate: [0, -2, 0] }}
-              transition={{ duration: 0.6, rotate: { duration: 5, repeat: Infinity, ease: 'easeInOut' } }}
-              style={{ transformOrigin: '230px 200px' }}
-            />
-
-            {/* Shadow */}
-            <ellipse cx="200" cy="355" fill="#1a1c1a" fillOpacity="0.05" rx="100" ry="12" />
-
-            {/* Floating particles */}
-            <motion.circle cx="100" cy="120" fill="#9e90af" fillOpacity="0.5" r="6" animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} />
-            <motion.circle cx="300" cy="140" fill="#a0f0f0" fillOpacity="0.5" r="9" animate={{ y: [0, 6, 0] }} transition={{ duration: 4, repeat: Infinity, delay: 1, ease: 'easeInOut' }} />
-            <motion.circle cx="270" cy="70" fill="#7c9e87" fillOpacity="0.4" r="5" animate={{ y: [0, -5, 0] }} transition={{ duration: 3.5, repeat: Infinity, delay: 0.5, ease: 'easeInOut' }} />
-          </motion.svg>
+          </AnimatePresence>
         </div>
 
         {/* Kutipan — berubah otomatis */}

@@ -3,6 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { PageTransition, FadeInView, HoverCard } from '../components/PageTransition';
+import heroImg from '../assets/illustrations/hero-dashboard.png';
+import quizImg from '../assets/illustrations/action-quiz.png';
+import scanImg from '../assets/illustrations/action-scan.png';
+import historyImg from '../assets/illustrations/action-history.png';
 
 export default function StartMenu() {
   const navigate = useNavigate();
@@ -34,30 +38,33 @@ export default function StartMenu() {
   const actionButtons = [
     {
       icon: 'description',
-      iconBg: 'bg-[#c7ebd1]/30',
-      iconColor: 'text-[#456551]',
+      iconBg: 'bg-green-50',
+      iconColor: 'text-[#15803d]',
       title: "Isi Kuesioner",
       desc: "Jawab pertanyaan seputar perasaan harian kamu.",
       route: '/quiz',
       badge: null,
+      img: quizImg,
     },
     {
       icon: 'photo_camera',
-      iconBg: 'bg-[#9deded]/30',
-      iconColor: 'text-[#006a6a]',
+      iconBg: 'bg-cyan-50',
+      iconColor: 'text-cyan-600',
       title: "Scan Wajah AI",
       desc: "Biarkan AI menganalisis ekspresi wajah secara instan.",
       route: '/scan',
       badge: 'AI',
+      img: scanImg,
     },
     {
       icon: 'history',
-      iconBg: 'bg-[#9e90af]/15',
-      iconColor: 'text-[#655975]',
+      iconBg: 'bg-purple-50',
+      iconColor: 'text-purple-600',
       title: "Lihat Riwayat",
       desc: "Tinjau pemeriksaan sebelumnya dan pantau kemajuanmu.",
       route: '/history',
       badge: null,
+      img: historyImg,
     },
   ];
 
@@ -113,17 +120,27 @@ export default function StartMenu() {
             </div>
           </div>
 
-          <motion.div className="relative z-10 bg-white/90 backdrop-blur-sm p-6 sm:p-10 md:p-12 rounded-2xl max-w-2xl border border-white/50 shadow-sm" initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
-            <motion.p className="font-semibold text-xs sm:text-sm tracking-[0.05em] text-[#7c9e87] mb-3 sm:mb-4 uppercase flex items-center gap-2" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-              <span className="material-symbols-outlined text-[16px]">waving_hand</span>
-              {getGreeting()}
-            </motion.p>
-            <motion.h1 className="text-[28px] sm:text-[40px] md:text-[48px] leading-[1.2] font-semibold text-[#1a1c1a] mb-4 sm:mb-6" style={{ fontFamily: "'Newsreader', serif", letterSpacing: '-0.02em' }} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
-              {"Hei, "}<span className="text-[#456551]">{username}</span>{" 👋"}
-            </motion.h1>
-            <motion.p className="text-[15px] sm:text-[18px] leading-[1.6] text-[#424843] max-w-lg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.75 }}>
-              {warmMessage}
-            </motion.p>
+          <motion.div className="relative z-10 bg-white/90 backdrop-blur-sm p-6 sm:p-10 md:p-12 rounded-2xl max-w-2xl border border-white/50 shadow-sm flex flex-col md:flex-row items-center gap-6 md:gap-8" initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
+            <div className="flex-1">
+              <motion.p className="font-semibold text-xs sm:text-sm tracking-[0.05em] text-[#15803d] mb-3 sm:mb-4 uppercase flex items-center gap-2" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+                <span className="material-symbols-outlined text-[16px]">waving_hand</span>
+                {getGreeting()}
+              </motion.p>
+              <motion.h1 className="text-[28px] sm:text-[40px] md:text-[48px] leading-[1.2] font-bold text-gray-900 mb-4 sm:mb-6" style={{ fontFamily: "'Newsreader', serif", letterSpacing: '-0.02em' }} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+                {"Hei, "}<span className="text-[#456551]">{username}</span>{" 👋"}
+              </motion.h1>
+              <motion.p className="text-[15px] sm:text-[18px] leading-[1.6] text-gray-600 max-w-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.75 }}>
+                {warmMessage}
+              </motion.p>
+            </div>
+            <motion.div
+              className="flex-shrink-0 w-40 h-40 md:w-56 md:h-56"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
+              <img src={heroImg} alt="Calm character" className="w-full h-full object-contain" />
+            </motion.div>
           </motion.div>
         </motion.section>
 
@@ -150,13 +167,9 @@ export default function StartMenu() {
                     {btn.badge && (
                       <div className="absolute top-6 right-6 text-white text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider bg-[#14532d]">{btn.badge}</div>
                     )}
-                    <motion.div
-                      className={`relative z-10 w-14 h-14 rounded-full ${btn.iconBg} flex items-center justify-center mb-6`}
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <span className={`material-symbols-outlined filled ${btn.iconColor} text-[24px]`}>{btn.icon}</span>
-                    </motion.div>
+                    <div className="w-20 h-20 mb-6 group-hover:scale-110 transition-transform">
+                      <img src={btn.img} alt={btn.title} className="w-full h-full object-contain" />
+                    </div>
                     <h3 className="relative z-10 text-[18px] sm:text-[20px] leading-[1.3] font-bold text-[#1a1c1a] mb-3" style={{ fontFamily: "'Newsreader', serif" }}>
                       {btn.title}
                     </h3>
