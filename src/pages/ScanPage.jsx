@@ -80,10 +80,19 @@ export default function ScanPage() {
     setAnalyzing(true);
     setError(null);
     try {
-      // Remove data:image/jpeg;base64, prefix
+      // Convert base64 data URL to File object for multipart upload
       const base64Data = capturedImage.split(',')[1];
-      const res = await ScanAPI.analyze(base64Data);
-      navigate('/result', { state: { result: res.data } });
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const file = new File([byteArray], 'scan.jpg', { type: 'image/jpeg' });
+
+      const res = await ScanAPI.analyze(file);
+      const resultData = res.data.result || res.data;
+      navigate('/result', { state: { result: { ...resultData, type: 'scan' } } });
     } catch (err) {
       const status = err?.response?.status;
       if (status === 400) setError("Gambar tidak valid. Silakan ambil ulang.");

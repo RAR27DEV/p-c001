@@ -35,7 +35,7 @@ export default function RegisterPage() {
   const experienceOptions = [1, 2, 3, 5];
 
   const genderOptions = [
-    { value: 'Laki-laki', label: 'Laki-laki', icon: 'man' },
+    { value: 'Laki-Laki', label: 'Laki-laki', icon: 'man' },
     { value: 'Perempuan', label: 'Perempuan', icon: 'woman' },
     { value: 'Lainnya', label: 'Lainnya', icon: 'transgender' },
   ];
@@ -51,7 +51,9 @@ export default function RegisterPage() {
   const validateStep1 = () => {
     const e = {};
     if (!form.username.trim()) e.username = 'Nama pengguna wajib diisi';
-    if (form.password.length < 6) e.password = 'Minimal 6 karakter';
+    else if (form.username.trim().length < 8) e.username = 'Minimal 8 karakter';
+    else if (form.username.trim().length > 20) e.username = 'Maksimal 20 karakter';
+    if (form.password.length < 8) e.password = 'Minimal 8 karakter';
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -74,7 +76,7 @@ export default function RegisterPage() {
     if (!validateStep2()) return;
     setLoading(true);
     try {
-      await AuthAPI.register(form.username, form.password, parseInt(form.age), form.gender, form.job_role);
+      await AuthAPI.register(form.username, form.password, parseInt(form.age), form.gender, form.job_role, parseInt(form.years_experience));
       await AuthAPI.login(form.username, form.password);
       localStorage.setItem('bs_years_experience', form.years_experience);
       navigate('/start');
@@ -149,7 +151,7 @@ export default function RegisterPage() {
                   {errors.username && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-[#ba1a1a] mt-1 ml-1">{errors.username}</motion.p>}
                 </div>
                 <div>
-                  <label className="block font-semibold text-sm tracking-[0.05em] text-[#1a1c1a] mb-1.5 ml-1">Kata Sandi (Min 6)</label>
+                  <label className="block font-semibold text-sm tracking-[0.05em] text-[#1a1c1a] mb-1.5 ml-1">Kata Sandi (Min 8)</label>
                   <div className="relative group">
                     <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#727973]/60 group-focus-within:text-[#456551] transition-colors">lock</span>
                     <input type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} className={inputClass + " !pr-12"} />
