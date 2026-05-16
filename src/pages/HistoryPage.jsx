@@ -81,19 +81,19 @@ export default function HistoryPage() {
         {/* Stat Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { icon: 'assignment_turned_in', label: "Total Pemeriksaan", value: totalChecks, color: 'text-[#456551]', bg: 'bg-[#c7ebd1]/30', iconBg: 'bg-[#c7ebd1]/50' },
-            { icon: 'description', label: "Kuis", value: `${quizCount}x`, color: 'text-[#456551]', bg: 'bg-[#c7ebd1]/20', iconBg: 'bg-[#c7ebd1]/40' },
-            { icon: 'photo_camera', label: "Scan", value: `${scanCount}x`, color: 'text-[#006a6a]', bg: 'bg-[#9deded]/15', iconBg: 'bg-[#9deded]/30' },
-            { icon: 'favorite', label: "Tingkat Sehat", value: `${healthyPercent}%`, color: 'text-[#7c9e87]', bg: 'bg-[#7c9e87]/10', iconBg: 'bg-[#7c9e87]/20' },
+            { icon: 'assignment_turned_in', label: "Total Pemeriksaan", value: totalChecks, color: 'text-[#15803d]', bg: 'bg-white', iconBg: 'bg-green-50' },
+            { icon: 'description', label: "Kuis", value: `${quizCount}x`, color: 'text-[#15803d]', bg: 'bg-white', iconBg: 'bg-green-50' },
+            { icon: 'photo_camera', label: "Scan", value: `${scanCount}x`, color: 'text-cyan-600', bg: 'bg-white', iconBg: 'bg-cyan-50' },
+            { icon: 'favorite', label: "Tingkat Sehat", value: `${healthyPercent}%`, color: 'text-[#15803d]', bg: 'bg-white', iconBg: 'bg-green-50' },
           ].map((stat, idx) => (
             <FadeInView key={idx} delay={0.05 + idx * 0.08}>
               <HoverCard>
-                <div className={`${stat.bg} rounded-2xl p-5 border border-white/50 backdrop-blur-sm flex flex-col gap-3 h-full`}>
+                <div className={`${stat.bg} rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col gap-3 h-full`}>
                   <div className={`w-10 h-10 ${stat.iconBg} rounded-xl flex items-center justify-center`}>
                     <span className={`material-symbols-outlined ${stat.color} text-[20px]`}>{stat.icon}</span>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-[#727973] tracking-[0.05em] uppercase mb-1">{stat.label}</p>
+                    <p className="text-xs font-semibold text-gray-500 tracking-[0.05em] uppercase mb-1">{stat.label}</p>
                     <p className={`text-[24px] font-bold ${stat.color} leading-tight`} style={{ fontFamily: "'Newsreader', serif" }}>{stat.value}</p>
                   </div>
                 </div>
@@ -115,8 +115,8 @@ export default function HistoryPage() {
                   <motion.button
                     key={filter.key}
                     onClick={() => setActiveFilter(filter.key)}
-                    className={`px-4 py-2 rounded-full font-semibold text-sm tracking-[0.03em] transition-all duration-300 flex items-center gap-1.5 ${
-                      activeFilter === filter.key ? 'bg-[#456551] text-white shadow-sm' : 'bg-white/60 border border-[#c2c8c1]/40 text-[#424843] hover:bg-[#e3e3df]'
+                    className={`px-4 py-2 rounded-full font-medium text-sm transition-all duration-300 flex items-center gap-1.5 ${
+                      activeFilter === filter.key ? 'bg-[#456551] text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
                     }`}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -182,13 +182,13 @@ export default function HistoryPage() {
             {wellnessTips.map((tip, idx) => (
               <FadeInView key={idx} delay={0.1 + idx * 0.1}>
                 <HoverCard className="h-full">
-                  <div className={`${tip.bg} rounded-2xl p-6 border border-white/50 backdrop-blur-sm flex flex-col gap-4 h-full`}>
-                    <motion.div className={`w-12 h-12 rounded-xl ${tip.bg} flex items-center justify-center border border-white/60`} whileHover={{ rotate: -8, scale: 1.1 }}>
+                  <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col gap-4 h-full">
+                    <motion.div className={`w-12 h-12 rounded-xl ${tip.bg} flex items-center justify-center`} whileHover={{ rotate: -8, scale: 1.1 }}>
                       <span className={`material-symbols-outlined filled ${tip.color} text-[24px]`}>{tip.icon}</span>
                     </motion.div>
                     <div>
-                      <h3 className="text-[18px] font-semibold text-[#1a1c1a] mb-2" style={{ fontFamily: "'Newsreader', serif" }}>{tip.title}</h3>
-                      <p className="text-[14px] leading-[1.65] text-[#424843]">{tip.desc}</p>
+                      <h3 className="text-[18px] font-semibold text-gray-900 mb-2" style={{ fontFamily: "'Newsreader', serif" }}>{tip.title}</h3>
+                      <p className="text-[14px] leading-[1.65] text-gray-500">{tip.desc}</p>
                     </div>
                   </div>
                 </HoverCard>
@@ -200,7 +200,7 @@ export default function HistoryPage() {
         {/* Banner Motivasi */}
         <FadeInView>
           <motion.div className="relative rounded-2xl overflow-hidden mt-4" whileHover={{ scale: 1.005 }}>
-            <div className="absolute inset-0 bg-gradient-to-r from-[#5a9e72] via-[#7cb88e] to-[#5a9e72]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#166534] via-[#15803d] to-[#166534]" />
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 p-8 md:p-10">
               <div className="flex items-center gap-5">
                 <motion.div className="w-14 h-14 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20 shrink-0" animate={{ rotate: [0, 5, 0] }} transition={{ duration: 6, repeat: Infinity }}>
