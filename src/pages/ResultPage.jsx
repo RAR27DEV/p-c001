@@ -2,6 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PageTransition } from '../components/PageTransition';
+import imgRendah from '../assets/illustrations/rendah.png';
+import imgSedang from '../assets/illustrations/sedang.png';
+import imgTinggi from '../assets/illustrations/tinggi.png';
 
 export default function ResultPage() {
   const location = useLocation();
@@ -11,152 +14,164 @@ export default function ResultPage() {
   if (!result) {
     return (
       <PageTransition className="flex justify-center items-center min-h-screen bg-[#faf9f6]" style={{ fontFamily: "'Manrope', sans-serif" }}>
-        <motion.div className="glass-card p-10 rounded-xl text-center max-w-md" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5 }}>
-          <motion.span className="material-symbols-outlined text-[#727973] text-5xl mb-4 block" animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 2, repeat: Infinity }}>search_off</motion.span>
-          <p className="text-[#1a1c1a] font-medium mb-6 text-lg">{"Tidak ada hasil ditemukan. Silakan isi kuis terlebih dahulu."}</p>
-          <motion.button onClick={() => navigate('/start')} className="px-8 py-3 rounded-full bg-[#456551] text-white font-semibold text-sm shadow-md" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-            {"Ke Dashboard"}
-          </motion.button>
-        </motion.div>
+        <div className="bg-white rounded-3xl p-10 text-center max-w-md shadow-sm border border-gray-100">
+          <span className="material-symbols-outlined text-gray-400 text-5xl mb-4 block">search_off</span>
+          <p className="text-gray-900 font-medium mb-6 text-lg">Tidak ada hasil ditemukan. Silakan isi kuis terlebih dahulu.</p>
+          <button onClick={() => navigate('/start')} className="px-8 py-3 rounded-full bg-[#166534] text-white font-semibold text-sm">
+            Ke Dashboard
+          </button>
+        </div>
       </PageTransition>
     );
   }
 
   const score = result.score || 0;
-  const isScan = result.type === 'scan';
   const isHighRisk = score >= 20;
   const isWarning = score >= 10 && score < 20;
 
-  const statusIcon = isHighRisk ? 'warning' : (isWarning ? 'info' : 'check_circle');
-  const statusColor = isHighRisk ? '#ba1a1a' : (isWarning ? '#D4A700' : '#456551');
-  const statusBg = isHighRisk ? 'bg-[#ffdad6]/50' : (isWarning ? 'bg-[#FFF5D1]' : 'bg-[#c7ebd1]/30');
-  const statusBadgeBg = isHighRisk ? 'bg-[#ffdad6]' : (isWarning ? 'bg-[#FFF5D1]' : 'bg-[#c7ebd1]');
-  const statusBadgeText = isHighRisk ? 'text-[#93000a]' : (isWarning ? 'text-[#7A6000]' : 'text-[#012111]');
-
-  const title = isHighRisk ? "Risiko Burnout Tinggi" : isWarning ? "Risiko Burnout Sedang" : "Kondisi Sehat / Baik";
-  const badgeLabel = isHighRisk ? "Risiko Tinggi" : isWarning ? "Kelelahan Ringan" : "Terkendali";
-
-  const dateObj = result.created_at ? new Date(result.created_at) : new Date();
-  const formattedDate = dateObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+  const title = isHighRisk ? "Risiko Burnout Tinggi" : isWarning ? "Risiko Burnout Sedang" : "Risiko Burnout Rendah";
+  const badgeLabel = isHighRisk ? "RISIKO BURNOUT TINGGI" : isWarning ? "RISIKO BURNOUT SEDANG" : "RISIKO BURNOUT RENDAH";
+  const badgeColor = isHighRisk ? 'bg-red-50 text-red-600 border-red-200' : isWarning ? 'bg-amber-50 text-amber-600 border-amber-200' : 'bg-green-50 text-[#15803d] border-green-200';
+  const illustration = isHighRisk ? imgTinggi : isWarning ? imgSedang : imgRendah;
+  const illustrationLabel = isHighRisk ? "HIGH BURNOUT RISK" : isWarning ? "MODERATE BURNOUT RISK" : "LOW BURNOUT RISK";
 
   const fatiguePercent = Math.min(Math.round((score / 25) * 100), 100);
   const stressPercent = Math.min(Math.round((score / 25) * 75), 100);
   const anxietyPercent = Math.min(Math.round((score / 25) * 50), 100);
 
+  const recommendation = isHighRisk
+    ? "Tingkat kelelahan tinggi terdeteksi. Pertimbangkan untuk mengambil hari istirahat penuh dan berkonsultasi dengan profesional."
+    : isWarning
+      ? "Stres sedang terdeteksi. Pertimbangkan jeda mindfulness 15 menit dan atur ulang prioritas harianmu."
+      : "Tingkat stres Anda terlihat sehat. Terus pertahankan keseimbangan dan rutinitas positifmu!";
+
   return (
-    <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col items-center justify-center p-4 sm:p-6 relative" style={{ fontFamily: "'Manrope', sans-serif" }}>
-
-      <motion.div className="ambient-shape ambient-1" animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 14, repeat: Infinity }} />
-      <motion.div className="ambient-shape ambient-2" animate={{ scale: [1.1, 1, 1.1] }} transition={{ duration: 18, repeat: Infinity }} />
-
+    <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col items-center justify-center px-4 py-8" style={{ fontFamily: "'Manrope', sans-serif" }}>
+      
       <motion.div
-        initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
-        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full max-w-2xl glass-card rounded-xl p-5 sm:p-8 md:p-10 flex flex-col gap-6 sm:gap-8 relative z-10"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full max-w-md bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden"
       >
-        {/* Method + Status Badge */}
-        <motion.div className="flex items-center justify-between" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <div className="flex items-center gap-2">
-            {/* Method badge */}
-            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold text-[11px] tracking-wider uppercase ${
-              isScan ? 'bg-[#006a6a]/10 text-[#006a6a]' : 'bg-[#456551]/10 text-[#456551]'
-            }`}>
-              <span className="material-symbols-outlined text-[12px]">{isScan ? 'photo_camera' : 'description'}</span>
-              {isScan ? "Scan Wajah" : "Kuis"}
-            </span>
-            {/* Status badge */}
-            <motion.span
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${statusBadgeBg} ${statusBadgeText} font-semibold text-xs tracking-[0.05em]`}
-              initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ delay: 0.3, type: 'spring', stiffness: 300 }}
-            >
-              <motion.span className="w-2 h-2 rounded-full" style={{ backgroundColor: statusColor }} animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 2, repeat: Infinity }} />
-              {badgeLabel}
-            </motion.span>
-          </div>
-          <span className="text-sm text-[#727973]">{formattedDate}</span>
-        </motion.div>
+        {/* Header */}
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-100">
+          <button onClick={() => navigate('/start')} className="w-9 h-9 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-100 transition-colors">
+            <span className="material-symbols-outlined text-gray-600 text-[20px]">arrow_back</span>
+          </button>
+          <h1 className="text-lg font-bold text-gray-900" style={{ fontFamily: "'Newsreader', serif" }}>Hasil Analisis</h1>
+        </div>
 
-        {/* Header with Icon */}
-        <motion.div className="flex items-start gap-4" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3, duration: 0.5 }}>
-          <motion.div className={`w-16 h-16 rounded-full ${statusBg} flex items-center justify-center shrink-0`} initial={{ scale: 0, rotate: -30 }} animate={{ scale: 1, rotate: 0 }} transition={{ delay: 0.4, type: 'spring', stiffness: 200 }}>
-            <span className="material-symbols-outlined filled text-3xl" style={{ color: statusColor }}>{statusIcon}</span>
-          </motion.div>
-          <div>
-            <h1 className="text-[24px] sm:text-[36px] leading-[1.3] font-medium mb-2" style={{ fontFamily: "'Newsreader', serif", color: statusColor }}>
-              {title}
-            </h1>
-            <p className="text-[16px] leading-[1.6] text-[#424843]">{result.description}</p>
-          </div>
-        </motion.div>
-
-        {/* Emotion label — only for scan results */}
-        {isScan && result.emotion_label && (
-          <motion.div
-            className="flex items-center gap-3 px-5 py-4 rounded-xl bg-[#9deded]/10 border border-[#006a6a]/15"
-            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
+        {/* Content */}
+        <div className="px-6 py-8 flex flex-col items-center text-center">
+          
+          {/* Badge */}
+          <motion.span
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className={`inline-block px-4 py-1.5 rounded-full text-[11px] font-bold tracking-wider uppercase border ${badgeColor}`}
           >
-            <div className="w-10 h-10 rounded-full bg-[#006a6a]/15 flex items-center justify-center">
-              <span className="material-symbols-outlined text-[#006a6a]">face</span>
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-[#727973] uppercase tracking-wider">{"Emosi Terdeteksi"}</p>
-              <p className="text-lg font-semibold text-[#006a6a] capitalize">{result.emotion_label}</p>
-            </div>
+            {badgeLabel}
+          </motion.span>
+
+          {/* Illustration */}
+          <motion.div
+            className="my-6 w-44 h-44 sm:w-52 sm:h-52"
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
+            <img src={illustration} alt={illustrationLabel} className="w-full h-full object-contain" />
           </motion.div>
-        )}
 
-        {/* Score Bars */}
-        <motion.div className="flex flex-col gap-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
-          <div className="flex items-center gap-3 mb-2">
-            <span className="material-symbols-outlined text-[#7c9e87] text-2xl">analytics</span>
-            <h3 className="text-[24px] leading-[1.4] font-medium text-[#1a1c1a]" style={{ fontFamily: "'Newsreader', serif" }}>
-              {"Hasil Analisis"}
-            </h3>
-          </div>
-          {[
-            { label: "Lelah (Fatigue)", percent: fatiguePercent, color: '#7c9e87' },
-            { label: "Stres (Stress)", percent: stressPercent, color: '#9e90af' },
-            { label: "Cemas (Anxiety)", percent: anxietyPercent, color: '#84d4d4' },
-          ].map((bar, idx) => (
-            <motion.div key={idx} className="flex flex-col gap-1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 + idx * 0.12 }}>
-              <div className="flex justify-between items-center font-semibold text-sm tracking-[0.05em]">
-                <span className="text-[#1a1c1a]">{bar.label}</span>
-                <motion.span style={{ color: bar.color }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 + idx * 0.15 }}>{bar.percent}%</motion.span>
+          {/* Caption under illustration */}
+          <p className="text-[10px] text-gray-400 uppercase tracking-widest font-semibold -mt-2 mb-4">{illustrationLabel}</p>
+
+          {/* Title */}
+          <motion.h2
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="text-[24px] sm:text-[28px] font-bold text-gray-900 mb-2"
+            style={{ fontFamily: "'Newsreader', serif" }}
+          >
+            {title}
+          </motion.h2>
+
+          {/* Description */}
+          <p className="text-sm text-gray-500 mb-8 max-w-xs">{result.description}</p>
+
+          {/* Score Bars */}
+          <motion.div
+            className="w-full flex flex-col gap-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            {[
+              { label: "Lelah (Fatigue)", percent: fatiguePercent, color: '#22c55e' },
+              { label: "Stres (Stress)", percent: stressPercent, color: '#6366f1' },
+              { label: "Cemas (Anxiety)", percent: anxietyPercent, color: '#06b6d4' },
+            ].map((bar, idx) => (
+              <div key={idx} className="flex flex-col gap-1.5">
+                <div className="flex justify-between items-center text-sm font-medium">
+                  <span className="text-gray-700">{bar.label}</span>
+                  <span className="text-gray-500">{bar.percent}%</span>
+                </div>
+                <div className="h-2.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full rounded-full"
+                    style={{ backgroundColor: bar.color }}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${bar.percent}%` }}
+                    transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.6 + idx * 0.15 }}
+                  />
+                </div>
               </div>
-              <div className="h-3 w-full bg-[#e3e3df] rounded-full overflow-hidden border border-white/30">
-                <motion.div className="h-full rounded-full" style={{ backgroundColor: bar.color }} initial={{ width: 0 }} animate={{ width: `${bar.percent}%` }} transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.7 + idx * 0.15 }} />
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+            ))}
+          </motion.div>
 
-        <motion.div className="w-full h-px bg-[#c2c8c1]/30" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 1.1, duration: 0.5 }} />
-
-        {/* Recommendations */}
-        <motion.div className="bg-[#faf9f6]/50 rounded-lg p-4 border border-[#c2c8c1]/20" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}>
-          <h4 className="font-semibold text-sm tracking-[0.05em] text-[#1a1c1a] mb-2 flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#456551] text-sm">lightbulb</span>
-            {"Wawasan & Rekomendasi"}
-          </h4>
-          <p className="text-[16px] leading-[1.6] text-[#424843] text-sm">
-            {isHighRisk
-              ? "Tingkat kelelahan tinggi terdeteksi. Pertimbangkan untuk mengambil hari istirahat penuh dan berkonsultasi dengan profesional."
-              : isWarning
-                ? "Stres sedang terdeteksi. Pertimbangkan jeda mindfulness 15 menit."
-                : "Tingkat stres Anda terlihat sehat. Terus pertahankan keseimbangan!"}
-          </p>
-        </motion.div>
+          {/* Recommendations */}
+          <motion.div
+            className="w-full mt-8 bg-gray-50 rounded-2xl p-5 text-left"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+          >
+            <h4 className="font-semibold text-sm text-gray-900 mb-2 flex items-center gap-2">
+              <span className="material-symbols-outlined text-[16px] text-red-400">lightbulb</span>
+              Wawasan & Rekomendasi
+            </h4>
+            <p className="text-[13px] leading-[1.7] text-gray-500">
+              {recommendation}
+            </p>
+          </motion.div>
+        </div>
 
         {/* Action Buttons */}
-        <motion.div className="flex flex-col sm:flex-row gap-3" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.3 }}>
-          <motion.button onClick={() => navigate('/history')} className="flex-1 bg-[#e8e8e5] text-[#1a1c1a] font-semibold text-sm tracking-[0.05em] py-3 rounded-xl border border-[#c2c8c1]/30 hover:bg-[#e3e3df] transition-all" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }}>
-            {"Lihat Riwayat"}
+        <div className="px-6 pb-6 flex flex-col gap-3">
+          <motion.button
+            onClick={() => navigate('/start')}
+            className="w-full py-3.5 rounded-full bg-[#166534] text-white font-semibold text-sm hover:bg-[#15803d] transition-colors"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            Kembali ke Dashboard
           </motion.button>
-          <motion.button onClick={() => navigate('/start')} className="flex-1 bg-[#456551] text-white font-semibold text-sm tracking-[0.05em] py-3 rounded-xl hover:bg-[#7c9e87] transition-all shadow-md" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }}>
-            {"Kembali ke Dashboard"}
+          <motion.button
+            onClick={() => navigate('/history')}
+            className="w-full py-3.5 rounded-full bg-white border border-gray-200 text-gray-700 font-semibold text-sm hover:bg-gray-50 transition-colors"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            Lihat Riwayat
           </motion.button>
-        </motion.div>
+        </div>
       </motion.div>
     </PageTransition>
   );
