@@ -79,7 +79,7 @@ export default function RegisterPage() {
     } finally { setLoading(false); }
   };
 
-  const inputClass = "w-full pl-12 pr-4 py-3 sm:py-3.5 bg-white/50 border border-[#c2c8c1]/40 rounded-xl text-[15px] sm:text-[16px] leading-[1.6] text-[#1a1c1a] placeholder:text-[#727973]/50 focus:outline-none focus:border-[#456551]/50 focus:ring-4 focus:ring-[#456551]/10 transition-all duration-300 shadow-sm hover:border-[#c2c8c1] hover:shadow-md";
+  const inputClass = "w-full pl-12 pr-4 py-3 sm:py-3.5 bg-[#E8F0FE] border-transparent rounded-2xl text-sm text-[#1a1c1a] placeholder:text-gray-400 focus:bg-white focus:border-[#456551] focus:ring-2 focus:ring-[#456551]/20 transition-all shadow-sm";
 
   return (
     <motion.div
@@ -257,7 +257,7 @@ export default function RegisterPage() {
                 <span className="material-symbols-outlined text-[18px]">arrow_back</span>Kembali
               </motion.button>
             )}
-            <motion.button type="submit" disabled={loading} className={`${step === 1 ? 'w-full' : 'flex-1'} py-3 sm:py-3.5 bg-[#456551] text-white rounded-xl font-semibold text-[14px] sm:text-[15px] tracking-wide hover:bg-[#3a5745] hover:shadow-lg transition-all duration-300 flex justify-center items-center gap-2 group relative overflow-hidden disabled:opacity-70`} whileTap={{ scale: 0.97 }} whileHover={{ scale: 1.01, y: -1 }}>
+            <motion.button type="submit" disabled={loading} className={`${step === 1 ? 'w-full' : 'flex-1'} py-3 sm:py-3.5 bg-[#456551] text-white rounded-2xl font-semibold text-[14px] sm:text-[15px] tracking-wide hover:bg-[#456551]/90 transition-all duration-300 flex justify-center items-center gap-2 group relative overflow-hidden disabled:opacity-70`} whileTap={{ scale: 0.97 }} whileHover={{ scale: 1.01, y: -1 }}>
               {loading ? (
                 <motion.div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full" animate={{ rotate: 360 }} transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }} />
               ) : (

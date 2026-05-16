@@ -324,7 +324,7 @@ export default function StartMenu() {
               </div>
 
               {/* Copyright */}
-              <p className="text-[12px] text-[#727973]/60 mt-2">© 2026 BurnoutSense · Capstone Project</p>
+              <p className="text-[12px] text-[#727973]/60 mt-2">© 2025 BurnoutSense · Capstone Project</p>
             </div>
           </div>
         </footer>

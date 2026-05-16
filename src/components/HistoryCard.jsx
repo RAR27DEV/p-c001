@@ -20,7 +20,7 @@ export default function HistoryCard({ item, onClick }) {
 
   return (
     <HoverCard className="h-full">
-      <article className="glass-card rounded-2xl p-5 flex flex-col gap-4 h-full group cursor-pointer border border-white/40 hover:border-[#7c9e87]/30 transition-all duration-300" onClick={onClick}>
+      <article className="bg-white rounded-2xl p-5 flex flex-col gap-4 h-full group cursor-pointer border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300" onClick={onClick}>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <motion.div className={`w-11 h-11 rounded-xl ${info.iconBg} ${info.iconColor} flex items-center justify-center`} whileHover={{ rotate: 10, scale: 1.1 }} transition={{ duration: 0.25 }}>
@@ -59,7 +59,7 @@ export default function HistoryCard({ item, onClick }) {
               {item.score}<span className="text-[13px] font-normal text-[#727973]">/25</span>
             </span>
           </div>
-          <div className="h-2 w-full bg-[#e3e3df] rounded-full overflow-hidden">
+          <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
             <motion.div className="h-full rounded-full" style={{ backgroundColor: info.barColor }} initial={{ width: 0 }} whileInView={{ width: `${scorePercent}%` }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} />
           </div>
         </div>

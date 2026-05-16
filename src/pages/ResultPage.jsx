@@ -17,7 +17,7 @@ export default function ResultPage() {
         <div className="bg-white rounded-3xl p-10 text-center max-w-md shadow-sm border border-gray-100">
           <span className="material-symbols-outlined text-gray-400 text-5xl mb-4 block">search_off</span>
           <p className="text-gray-900 font-medium mb-6 text-lg">Tidak ada hasil ditemukan. Silakan isi kuis terlebih dahulu.</p>
-          <button onClick={() => navigate('/start')} className="px-8 py-3 rounded-full bg-[#166534] text-white font-semibold text-sm">
+          <button onClick={() => navigate('/start')} className="px-8 py-3 rounded-full bg-[#456551] text-white font-semibold text-sm">
             Ke Dashboard
           </button>
         </div>
@@ -153,7 +153,7 @@ export default function ResultPage() {
         <div className="px-6 pb-6 flex flex-col gap-3">
           <motion.button
             onClick={() => navigate('/start')}
-            className="w-full py-3.5 rounded-full bg-[#166534] text-white font-semibold text-sm hover:bg-[#15803d] transition-colors"
+            className="w-full py-3.5 rounded-full bg-[#456551] text-white font-semibold text-sm hover:bg-[#456551]/90 transition-colors"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.1 }}

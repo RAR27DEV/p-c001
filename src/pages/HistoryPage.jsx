@@ -160,7 +160,7 @@ export default function HistoryPage() {
                       Mulai pemeriksaan pertamamu hari ini untuk melihat riwayat perjalanan kesehatan mentalmu di sini.
                     </p>
                   </div>
-                  <motion.button onClick={() => navigate('/start')} className="mt-2 px-8 py-3 rounded-full bg-[#166534] text-white font-semibold text-sm shadow-sm flex items-center gap-2" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  <motion.button onClick={() => navigate('/start')} className="mt-2 px-8 py-3 rounded-full bg-[#456551] text-white font-semibold text-sm shadow-sm flex items-center gap-2" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                     <span className="material-symbols-outlined text-[18px]">play_arrow</span>Mulai Pemeriksaan
                   </motion.button>
                 </div>
@@ -205,7 +205,7 @@ export default function HistoryPage() {
         {/* Banner Motivasi */}
         <FadeInView>
           <motion.div className="relative rounded-2xl overflow-hidden mt-4" whileHover={{ scale: 1.005 }}>
-            <div className="absolute inset-0 bg-gradient-to-r from-[#166534] via-[#15803d] to-[#166534]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#456551] via-[#5a8a6c] to-[#456551]" />
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 p-8 md:p-10">
               <div className="flex items-center gap-5">
                 <motion.div className="w-14 h-14 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20 shrink-0" animate={{ rotate: [0, 5, 0] }} transition={{ duration: 6, repeat: Infinity }}>
