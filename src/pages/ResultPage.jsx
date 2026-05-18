@@ -25,9 +25,18 @@ export default function ResultPage() {
     );
   }
 
-  const score = result.score || 0;
-  const isHighRisk = score >= 20;
-  const isWarning = score >= 10 && score < 20;
+  // Backend response: { burnout_class: 0|1|2, burnout_label: "Low"|"Moderate"|"High", confidence_score, feature_attributions }
+  // Fallback to legacy `score` (mock data) if burnout_class missing
+  const burnoutClass = result.burnout_class !== undefined ? result.burnout_class : null;
+  const burnoutLabel = (result.burnout_label || '').toLowerCase();
+  const confidence = result.confidence_score || 0;
+
+  const isHighRisk = burnoutClass !== null
+    ? (burnoutClass >= 2 || burnoutLabel === 'high')
+    : (result.score || 0) >= 20;
+  const isWarning = burnoutClass !== null
+    ? (burnoutClass === 1 || burnoutLabel === 'moderate')
+    : ((result.score || 0) >= 10 && (result.score || 0) < 20);
 
   const title = isHighRisk ? "Risiko Burnout Tinggi" : isWarning ? "Risiko Burnout Sedang" : "Risiko Burnout Rendah";
   const badgeLabel = isHighRisk ? "RISIKO BURNOUT TINGGI" : isWarning ? "RISIKO BURNOUT SEDANG" : "RISIKO BURNOUT RENDAH";
@@ -35,9 +44,18 @@ export default function ResultPage() {
   const illustration = isHighRisk ? imgTinggi : isWarning ? imgSedang : imgRendah;
   const illustrationLabel = isHighRisk ? "HIGH BURNOUT RISK" : isWarning ? "MODERATE BURNOUT RISK" : "LOW BURNOUT RISK";
 
+  // If backend gives confidence_score (0-1), use it as primary metric
+  const score = result.score || (confidence ? Math.round(confidence * 25) : (isHighRisk ? 22 : isWarning ? 15 : 8));
   const fatiguePercent = Math.min(Math.round((score / 25) * 100), 100);
   const stressPercent = Math.min(Math.round((score / 25) * 75), 100);
   const anxietyPercent = Math.min(Math.round((score / 25) * 50), 100);
+
+  const description = result.description
+    || (isHighRisk
+      ? "Tingkat stres dan kelelahan tinggi terdeteksi pada analisis."
+      : isWarning
+        ? "Terdeteksi tanda-tanda kelelahan ringan sampai sedang."
+        : "Kondisimu terlihat sehat dan seimbang.");
 
   const recommendation = isHighRisk
     ? "Tingkat kelelahan tinggi terdeteksi. Pertimbangkan untuk mengambil hari istirahat penuh dan berkonsultasi dengan profesional."
@@ -100,7 +118,7 @@ export default function ResultPage() {
           </motion.h2>
 
           {/* Description */}
-          <p className="text-sm text-gray-500 mb-8 max-w-xs">{result.description}</p>
+          <p className="text-sm text-gray-500 mb-8 max-w-xs">{description}</p>
 
           {/* Score Bars */}
           <motion.div

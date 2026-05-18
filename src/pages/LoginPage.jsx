@@ -26,7 +26,8 @@ export default function LoginPage() {
       await AuthAPI.login(form.username, form.password);
       navigate('/start');
     } catch (err) {
-      alert("Gagal masuk, periksa kembali data Anda.");
+      const msg = err?.response?.data?.message || "Gagal masuk, periksa kembali data Anda.";
+      alert(msg);
     } finally {
       setLoading(false);
     }

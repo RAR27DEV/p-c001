@@ -35,17 +35,19 @@ export default function RegisterPage() {
   const experienceOptions = [1, 2, 3, 5];
 
   const genderOptions = [
-    { value: 'Laki-laki', label: 'Laki-laki', icon: 'man' },
-    { value: 'Perempuan', label: 'Perempuan', icon: 'woman' },
-    { value: 'Lainnya', label: 'Lainnya', icon: 'transgender' },
+    { value: 'Male', label: 'Laki-laki', icon: 'man' },
+    { value: 'Female', label: 'Perempuan', icon: 'woman' },
+    { value: 'Non-binary', label: 'Non-biner', icon: 'transgender' },
+    { value: 'Prefer not to say', label: 'Lainnya', icon: 'more_horiz' },
   ];
 
   const jobRoleOptions = [
-    { value: 'Analyst', label: 'Analyst / Data / Research', icon: 'analytics' },
-    { value: 'Engineer', label: 'Engineer / IT / Developer', icon: 'code' },
-    { value: 'Manager', label: 'Manager / Lead / Supervisor', icon: 'supervisor_account' },
-    { value: 'Sales', label: 'Sales / Marketing / Support', icon: 'storefront' },
-    { value: 'HR', label: 'HR / Admin / Operasional', icon: 'badge' },
+    { value: 'Analyst', label: 'Analyst', icon: 'analytics' },
+    { value: 'Engineer', label: 'Engineer', icon: 'code' },
+    { value: 'Developer', label: 'Developer', icon: 'integration_instructions' },
+    { value: 'Manager', label: 'Manager', icon: 'supervisor_account' },
+    { value: 'Sales', label: 'Sales', icon: 'storefront' },
+    { value: 'HR', label: 'HR', icon: 'badge' },
   ];
 
   const validateStep1 = () => {
@@ -74,7 +76,7 @@ export default function RegisterPage() {
     if (!validateStep2()) return;
     setLoading(true);
     try {
-      await AuthAPI.register(form.username, form.password, parseInt(form.age), form.gender, form.job_role);
+      await AuthAPI.register(form.username, form.password, parseInt(form.age), form.gender, form.job_role, parseInt(form.years_experience));
       await AuthAPI.login(form.username, form.password);
       localStorage.setItem('bs_years_experience', form.years_experience);
       navigate('/start');
@@ -200,7 +202,7 @@ export default function RegisterPage() {
                   <label className="block font-semibold text-sm tracking-[0.05em] text-[#1a1c1a] mb-2 ml-1 flex items-center gap-1.5">
                     <span className="material-symbols-outlined text-[16px] text-[#456551]">wc</span>Jenis Kelamin
                   </label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     {genderOptions.map((opt) => {
                       const isSelected = form.gender === opt.value;
                       return (

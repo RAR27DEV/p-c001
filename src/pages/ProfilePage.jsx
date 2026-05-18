@@ -1,25 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { PageTransition } from '../components/PageTransition';
 import Navbar from '../components/Navbar';
+import { AuthAPI } from '../services/api';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const username = localStorage.getItem('bs_username') || '';
-  const [yearsExperience, setYearsExperience] = useState(localStorage.getItem('bs_years_experience') || '');
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState(null);
+  const [yearsExperience, setYearsExperience] = useState('');
 
   const experienceOptions = [1, 2, 3, 5];
-  const [customMode, setCustomMode] = useState(!experienceOptions.includes(parseInt(yearsExperience)));
+  const [customMode, setCustomMode] = useState(false);
 
-  const handleSave = () => {
-    if (yearsExperience && parseInt(yearsExperience) >= 0) {
+  // Fetch profile saat mount
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await AuthAPI.getProfile();
+        const data = res.data.data || res.data;
+        setProfile(data);
+        const yrs = String(data.years_experience || '');
+        setYearsExperience(yrs);
+        setCustomMode(!experienceOptions.includes(parseInt(yrs)));
+      } catch (err) {
+        setError("Gagal memuat profil");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  const handleSave = async () => {
+    if (!yearsExperience || parseInt(yearsExperience) < 0) return;
+    setSaving(true);
+    setError(null);
+    try {
+      await AuthAPI.updateProfile({ years_experience: parseInt(yearsExperience) });
       localStorage.setItem('bs_years_experience', yearsExperience);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      setError(err?.response?.data?.message || "Gagal menyimpan");
+    } finally {
+      setSaving(false);
     }
   };
+
+  if (loading) {
+    return (
+      <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col" style={{ fontFamily: "'Manrope', sans-serif" }}>
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <motion.div className="w-12 h-12 border-[3px] border-gray-200 border-t-[#456551] rounded-full" animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} />
+        </div>
+      </PageTransition>
+    );
+  }
 
   return (
     <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col" style={{ fontFamily: "'Manrope', sans-serif" }}>
@@ -34,14 +76,44 @@ export default function ProfilePage() {
           <h1 className="text-[24px] sm:text-[28px] font-bold text-gray-900" style={{ fontFamily: "'Newsreader', serif" }}>Profil</h1>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm space-y-6">
-          {/* Username (read-only) */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm space-y-5">
+          {/* Username */}
           <div>
             <label className="block font-semibold text-sm text-gray-700 mb-2 flex items-center gap-1.5">
               <span className="material-symbols-outlined text-[16px] text-[#456551]">person</span>Nama Pengguna
             </label>
             <div className="px-4 py-3 bg-gray-50 rounded-2xl text-sm text-gray-600 border border-gray-100">
-              {username}
+              {profile?.username || '—'}
+            </div>
+          </div>
+
+          {/* Age */}
+          <div>
+            <label className="block font-semibold text-sm text-gray-700 mb-2 flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[16px] text-[#456551]">cake</span>Usia
+            </label>
+            <div className="px-4 py-3 bg-gray-50 rounded-2xl text-sm text-gray-600 border border-gray-100">
+              {profile?.age || '—'} tahun
+            </div>
+          </div>
+
+          {/* Gender */}
+          <div>
+            <label className="block font-semibold text-sm text-gray-700 mb-2 flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[16px] text-[#456551]">wc</span>Jenis Kelamin
+            </label>
+            <div className="px-4 py-3 bg-gray-50 rounded-2xl text-sm text-gray-600 border border-gray-100">
+              {profile?.gender || '—'}
+            </div>
+          </div>
+
+          {/* Job Role */}
+          <div>
+            <label className="block font-semibold text-sm text-gray-700 mb-2 flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[16px] text-[#456551]">work</span>Peran Pekerjaan
+            </label>
+            <div className="px-4 py-3 bg-gray-50 rounded-2xl text-sm text-gray-600 border border-gray-100">
+              {profile?.job_role || '—'}
             </div>
           </div>
 
@@ -91,13 +163,22 @@ export default function ProfilePage() {
             )}
           </div>
 
+          {error && (
+            <div className="px-4 py-3 rounded-xl bg-red-50 text-red-600 text-sm border border-red-100">
+              {error}
+            </div>
+          )}
+
           {/* Save Button */}
           <motion.button
             onClick={handleSave}
-            className="w-full py-3.5 bg-[#456551] text-white rounded-2xl font-semibold text-sm hover:bg-[#456551]/90 transition-colors flex items-center justify-center gap-2"
+            disabled={saving}
+            className="w-full py-3.5 bg-[#456551] text-white rounded-2xl font-semibold text-sm hover:bg-[#456551]/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
             whileTap={{ scale: 0.97 }}
           >
-            {saved ? (
+            {saving ? (
+              <motion.div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full" animate={{ rotate: 360 }} transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }} />
+            ) : saved ? (
               <>
                 <span className="material-symbols-outlined text-[18px]">check</span>Tersimpan!
               </>
@@ -109,9 +190,8 @@ export default function ProfilePage() {
           </motion.button>
         </div>
 
-        {/* Info */}
         <p className="text-center text-xs text-gray-400 mt-6">
-          Data profil lainnya (usia, gender, peran) hanya bisa diubah melalui backend.
+          Saat ini hanya pengalaman kerja yang bisa diubah.
         </p>
       </main>
     </PageTransition>

@@ -9,14 +9,33 @@ export default function HistoryCard({ item, onClick }) {
   const formattedDate = dateObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
   const formattedTime = dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
-  const getLevelInfo = (score) => {
-    if (score >= 20) return { level: 'Parah', badgeBg: 'bg-[#ffdad6]', badgeText: 'text-[#93000a]', dotColor: '#ba1a1a', barColor: '#ba1a1a', icon: 'sentiment_stressed', iconBg: 'bg-[#ffdad6]/40', iconColor: 'text-[#ba1a1a]' };
-    if (score >= 10) return { level: 'Sedang', badgeBg: 'bg-[#FFF5D1]', badgeText: 'text-[#7A6000]', dotColor: '#D4A700', barColor: '#D4A700', icon: 'sentiment_neutral', iconBg: 'bg-[#FFF5D1]/60', iconColor: 'text-[#D4A700]' };
-    return { level: 'Ringan', badgeBg: 'bg-[#c7ebd1]', badgeText: 'text-[#012111]', dotColor: '#456551', barColor: '#456551', icon: 'sentiment_satisfied', iconBg: 'bg-[#c7ebd1]/40', iconColor: 'text-[#456551]' };
+  const getLevelInfo = (item) => {
+    // Backend uses burnout_class (0=Low, 1=Moderate, 2=High) or burnout_label
+    const label = (item.burnout_label || '').toLowerCase();
+    const cls = item.burnout_class;
+    
+    let level;
+    if (label === 'high' || cls === 2 || (item.score && item.score >= 20)) {
+      level = 'high';
+    } else if (label === 'moderate' || cls === 1 || (item.score && item.score >= 10)) {
+      level = 'moderate';
+    } else {
+      level = 'low';
+    }
+    
+    if (level === 'high') return { level: 'Tinggi', badgeBg: 'bg-[#ffdad6]', badgeText: 'text-[#93000a]', dotColor: '#ba1a1a', barColor: '#ba1a1a', icon: 'sentiment_stressed', iconBg: 'bg-[#ffdad6]/40', iconColor: 'text-[#ba1a1a]' };
+    if (level === 'moderate') return { level: 'Sedang', badgeBg: 'bg-[#FFF5D1]', badgeText: 'text-[#7A6000]', dotColor: '#D4A700', barColor: '#D4A700', icon: 'sentiment_neutral', iconBg: 'bg-[#FFF5D1]/60', iconColor: 'text-[#D4A700]' };
+    return { level: 'Rendah', badgeBg: 'bg-[#c7ebd1]', badgeText: 'text-[#012111]', dotColor: '#456551', barColor: '#456551', icon: 'sentiment_satisfied', iconBg: 'bg-[#c7ebd1]/40', iconColor: 'text-[#456551]' };
   };
 
-  const info = getLevelInfo(item.score);
-  const scorePercent = Math.round((item.score / 25) * 100);
+  const info = getLevelInfo(item);
+  // Use confidence_score (0-1) if available, else legacy score (0-25)
+  const scorePercent = item.confidence_score
+    ? Math.round(item.confidence_score * 100)
+    : Math.round(((item.score || 0) / 25) * 100);
+  const displayScore = item.confidence_score
+    ? `${Math.round(item.confidence_score * 100)}%`
+    : `${item.score || 0}/25`;
 
   return (
     <HoverCard className="h-full">
@@ -56,7 +75,7 @@ export default function HistoryCard({ item, onClick }) {
           <div className="flex items-baseline justify-between">
             <span className="text-[13px] font-medium text-[#727973]">Skor</span>
             <span className="text-[20px] font-bold text-[#1a1c1a]" style={{ fontFamily: "'Newsreader', serif" }}>
-              {item.score}<span className="text-[13px] font-normal text-[#727973]">/25</span>
+              {displayScore}
             </span>
           </div>
           <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">

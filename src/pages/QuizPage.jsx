@@ -40,23 +40,22 @@ export default function QuizPage() {
     setSubmitting(true);
     try {
       const payload = {
-        years_experience: parseInt(localStorage.getItem('bs_years_experience')) || 0,
         work_hours_per_week: parseInt(answers.work_hours_per_week) || 40,
-        remote_ratio: answers.remote_ratio || '',
+        remote_ratio: parseInt(answers.remote_ratio) ?? 2,
         satisfaction_score: parseInt(answers.satisfaction_score) || 3,
         stress_score: parseInt(answers.stress_score) || 5,
         work_life_balance: parseInt(answers.work_life_balance) || 5,
         sleep_hours: parseFloat(answers.sleep_hours) || 7,
         physical_activity_hrs: parseFloat(answers.physical_activity_hrs) || 1,
         manager_support: parseInt(answers.manager_support) || 3,
-        has_mental_health_support: answers.has_mental_health_support ?? false,
-        burnout_class: answers.burnout_class || '',
-        source: answers.source || '',
+        has_mental_health_support: answers.has_mental_health_support || "No",
       };
       const res = await QuizAPI.submitResult(payload);
-      navigate('/result', { state: { result: res.data } });
+      // Backend returns { status, result: { burnout_class, burnout_label, confidence_score, ... } }
+      const result = res.data.result || res.data;
+      navigate('/result', { state: { result: { ...result, type: 'quiz' } } });
     } catch (err) {
-      alert("Gagal mengirim. Silakan coba lagi.");
+      alert(err?.response?.data?.message || "Gagal mengirim. Silakan coba lagi.");
     } finally { setSubmitting(false); }
   };
 
