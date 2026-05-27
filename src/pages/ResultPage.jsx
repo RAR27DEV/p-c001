@@ -25,14 +25,16 @@ export default function ResultPage() {
     );
   }
 
-  // Backend response: burnout_class (0|1|2), class_label (bisa English atau Indonesia), confidence
+  // Backend response format:
+  // Quiz: { burnout_class, class_label, confidence, feature_attributions }
+  // Scan: { prediction, confidence, face_detected, face_confidence }
+  const label = (result.class_label || result.prediction || result.burnout_label || '').toLowerCase();
   const burnoutClass = result.burnout_class;
-  const label = (result.class_label || result.burnout_label || '').toLowerCase();
   const confidence = result.confidence || result.confidence_score || 0;
 
-  // Detect level — support both English and Indonesian labels
-  const isHighRisk = burnoutClass === 2 || label.includes('high') || label.includes('burnout') && !label.includes('akan');
-  const isWarning = burnoutClass === 1 || label.includes('moderate') || label.includes('akan');
+  // Detect level — support English, Indonesian, and scan prediction
+  const isHighRisk = burnoutClass === 2 || label === 'burnout' || label === 'high';
+  const isWarning = burnoutClass === 1 || label === 'akan burnout' || label === 'moderate';
 
   const title = isHighRisk ? "Risiko Burnout Tinggi" : isWarning ? "Akan Burnout" : "Risiko Burnout Rendah";
   const badgeLabel = isHighRisk ? "RISIKO BURNOUT TINGGI" : isWarning ? "AKAN BURNOUT" : "RISIKO BURNOUT RENDAH";

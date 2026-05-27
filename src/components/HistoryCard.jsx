@@ -11,13 +11,13 @@ export default function HistoryCard({ item, onClick }) {
 
   const getLevelInfo = (item) => {
     // Backend uses burnout_class (0=Low, 1=Moderate, 2=High) or burnout_label
-    const label = (item.class_label || item.burnout_label || '').toLowerCase();
+    const label = (item.class_label || item.prediction || item.burnout_label || '').toLowerCase();
     const cls = item.burnout_class;
     
     let level;
-    if (cls === 2 || label.includes('high') || (label.includes('burnout') && !label.includes('akan'))) {
+    if (cls === 2 || label === 'burnout' || label === 'high') {
       level = 'high';
-    } else if (cls === 1 || label.includes('moderate') || label.includes('akan')) {
+    } else if (cls === 1 || label === 'akan burnout' || label === 'moderate') {
       level = 'moderate';
     } else {
       level = 'low';
