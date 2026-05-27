@@ -35,7 +35,10 @@ export default function HistoryPage() {
   const totalChecks = history.length;
   const avgScore = totalChecks > 0 ? Math.round(history.reduce((s, h) => s + (h.score || 0), 0) / totalChecks) : 0;
   const lastCheckDate = totalChecks > 0 ? new Date(history[0].created_at).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }) : '—';
-  const healthyCount = history.filter(h => (h.score || 0) < 10).length;
+  const healthyCount = history.filter(h => {
+    const label = (h.class_label || h.burnout_label || '').toLowerCase();
+    return label === 'low' || h.burnout_class === 0;
+  }).length;
   const healthyPercent = totalChecks > 0 ? Math.round((healthyCount / totalChecks) * 100) : 0;
 
   const quizCount = history.filter(h => h.type === 'quiz').length;

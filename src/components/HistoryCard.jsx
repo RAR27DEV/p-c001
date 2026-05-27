@@ -11,13 +11,13 @@ export default function HistoryCard({ item, onClick }) {
 
   const getLevelInfo = (item) => {
     // Backend uses burnout_class (0=Low, 1=Moderate, 2=High) or burnout_label
-    const label = (item.burnout_label || '').toLowerCase();
+    const label = (item.class_label || item.burnout_label || '').toLowerCase();
     const cls = item.burnout_class;
     
     let level;
-    if (label === 'high' || cls === 2 || (item.score && item.score >= 20)) {
+    if (label === 'high' || cls === 2) {
       level = 'high';
-    } else if (label === 'moderate' || cls === 1 || (item.score && item.score >= 10)) {
+    } else if (label === 'moderate' || cls === 1) {
       level = 'moderate';
     } else {
       level = 'low';
@@ -29,13 +29,10 @@ export default function HistoryCard({ item, onClick }) {
   };
 
   const info = getLevelInfo(item);
-  // Use confidence_score (0-1) if available, else legacy score (0-25)
-  const scorePercent = item.confidence_score
-    ? Math.round(item.confidence_score * 100)
-    : Math.round(((item.score || 0) / 25) * 100);
-  const displayScore = item.confidence_score
-    ? `${Math.round(item.confidence_score * 100)}%`
-    : `${item.score || 0}/25`;
+  // Backend field: confidence (0-1), class_label
+  const confidence = item.confidence || item.confidence_score || 0;
+  const scorePercent = Math.round(confidence * 100);
+  const displayScore = confidence > 0 ? `${scorePercent}%` : (item.class_label || '—');
 
   return (
     <HoverCard className="h-full">
@@ -73,7 +70,7 @@ export default function HistoryCard({ item, onClick }) {
 
         <div className="flex flex-col gap-1.5">
           <div className="flex items-baseline justify-between">
-            <span className="text-[13px] font-medium text-[#727973]">Skor</span>
+            <span className="text-[13px] font-medium text-[#727973]">Confidence</span>
             <span className="text-[20px] font-bold text-[#1a1c1a]" style={{ fontFamily: "'Newsreader', serif" }}>
               {displayScore}
             </span>
