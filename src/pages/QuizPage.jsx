@@ -53,8 +53,8 @@ export default function QuizPage() {
       console.log('📤 Quiz payload yang dikirim ke backend:', JSON.stringify(payload, null, 2));
       const res = await QuizAPI.submitResult(payload);
       console.log('📥 Response dari backend:', JSON.stringify(res.data, null, 2));
-      // Backend returns { status, result: { burnout_class, burnout_label, confidence_score, ... } }
-      const result = res.data.result || res.data;
+      // Backend returns { status, message, data: { burnout_class, class_label, confidence } }
+      const result = res.data.data || res.data.result || res.data;
       navigate('/result', { state: { result: { ...result, type: 'quiz' } } });
     } catch (err) {
       alert(err?.response?.data?.message || "Gagal mengirim. Silakan coba lagi.");

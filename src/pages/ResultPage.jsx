@@ -28,9 +28,11 @@ export default function ResultPage() {
   // Backend response format:
   // Quiz: { burnout_class, class_label, confidence, feature_attributions }
   // Scan: { prediction, confidence, face_detected, face_confidence }
+  console.log('🔍 ResultPage received:', JSON.stringify(result, null, 2));
   const label = (result.class_label || result.prediction || result.burnout_label || '').toLowerCase();
   const burnoutClass = result.burnout_class;
   const confidence = result.confidence || result.confidence_score || 0;
+  console.log('🔍 Parsed: label=', label, 'burnoutClass=', burnoutClass, 'confidence=', confidence);
 
   // Detect level — support English, Indonesian, and scan prediction
   const isHighRisk = burnoutClass === 2 || label === 'burnout' || label === 'high';
