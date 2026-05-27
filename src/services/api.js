@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Backend Production URL (Railway)
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://burnoutsensecapstone-production.up.railway.app',
+  baseURL: import.meta.env.VITE_API_URL || 'https://zeroo-dev-burnoutsense-backend.hf.space',
 });
 
 // Pasang JWT di setiap request

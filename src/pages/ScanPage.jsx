@@ -92,12 +92,16 @@ export default function ScanPage() {
 
       const res = await ScanAPI.analyze(file);
       const result = res.data.result || res.data.data || res.data;
+      // Matikan kamera sebelum pindah halaman
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
       navigate('/result', { state: { result: { ...result, type: 'scan' } } });
     } catch (err) {
       const status = err?.response?.status;
       if (status === 400) setError("Gambar tidak valid. Silakan ambil ulang.");
       else if (status === 502) setError("Layanan AI tidak tersedia. Coba lagi nanti.");
-      else setError("Analisis gagal. Silakan coba lagi.");
+      else setError(err?.response?.data?.message || "Analisis gagal. Silakan coba lagi.");
       setAnalyzing(false);
     }
   };
