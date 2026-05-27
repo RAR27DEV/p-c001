@@ -31,15 +31,15 @@ export const AuthAPI = {
     return res;
   },
 
-  // GET /user
+  // GET /users/me
   getProfile: async () => {
-    const res = await api.get('/user');
+    const res = await api.get('/users/me');
     return res;
   },
 
-  // PUT /user
+  // PUT /users/me
   updateProfile: async (data) => {
-    const res = await api.put('/user', data);
+    const res = await api.put('/users/me', data);
     return res;
   },
 
@@ -61,22 +61,25 @@ export const QuizAPI = {
             id: 'q5', field: 'work_hours_per_week', type: 'choice',
             text_id: "Rata-rata, berapa jam kamu bekerja dalam seminggu?",
             options: [
-              { value: 25, label_id: "Kurang dari 30 jam" },
-              { value: 35, label_id: "30-40 jam" },
-              { value: 45, label_id: "41-50 jam" },
-              { value: 55, label_id: "51-60 jam" },
-              { value: 65, label_id: "Lebih dari 60 jam" }
+              { value: 30, label_id: "30 jam" },
+              { value: 35, label_id: "35 jam" },
+              { value: 40, label_id: "40 jam" },
+              { value: 45, label_id: "45 jam" },
+              { value: 50, label_id: "50 jam" },
+              { value: 55, label_id: "55 jam" },
+              { value: 60, label_id: "60 jam" },
+              { value: 70, label_id: "70 jam" }
             ]
           },
           {
             id: 'q6', field: 'remote_ratio', type: 'choice',
-            text_id: "Seberapa sering kamu bekerja secara remote?",
+            text_id: "Berapa persen waktu kerjamu yang dilakukan secara remote?",
             options: [
-              { value: 0, label_id: "Tidak pernah (full onsite)" },
-              { value: 1, label_id: "Jarang (1-2 hari/minggu)" },
-              { value: 2, label_id: "Setengah-setengah (hybrid)" },
-              { value: 3, label_id: "Sering (3-4 hari/minggu)" },
-              { value: 4, label_id: "Selalu (full remote)" }
+              { value: 0, label_id: "0% (full onsite)" },
+              { value: 25, label_id: "25% (jarang remote)" },
+              { value: 50, label_id: "50% (hybrid)" },
+              { value: 75, label_id: "75% (sering remote)" },
+              { value: 100, label_id: "100% (full remote)" }
             ]
           },
           {
@@ -164,46 +167,46 @@ export const QuizAPI = {
     };
   },
 
-  // POST /quiz/submit
+  // POST /quiz (submit)
   submitResult: async (answers) => {
-    const res = await api.post('/quiz/submit', answers);
+    const res = await api.post('/quiz', answers);
     return res;
   },
 
-  // GET /quiz/history
+  // GET /quiz (history)
   getHistory: async () => {
-    const res = await api.get('/quiz/history');
+    const res = await api.get('/quiz');
     return res;
   },
 
-  // GET /quiz/history/:id
+  // GET /quiz/:id
   getHistoryDetail: async (id) => {
-    const res = await api.get(`/quiz/history/${id}`);
+    const res = await api.get(`/quiz/${id}`);
     return res;
   },
 
-  // DELETE /quiz/history/:id
+  // DELETE /quiz/:id
   deleteHistory: async (id) => {
-    const res = await api.delete(`/quiz/history/${id}`);
+    const res = await api.delete(`/quiz/${id}`);
     return res;
   },
 };
 
 // === SCAN WAJAH ===
 export const ScanAPI = {
-  // POST /scan/submit — multipart/form-data dengan field "photo"
+  // POST /scans — multipart/form-data dengan field "photo"
   analyze: async (imageFile) => {
     const formData = new FormData();
     formData.append('photo', imageFile);
-    const res = await api.post('/scan/submit', formData, {
+    const res = await api.post('/scans', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return res;
   },
 
-  // GET /scan/history
+  // GET /scans
   getHistory: async () => {
-    const res = await api.get('/scan/history');
+    const res = await api.get('/scans');
     return res;
   },
 };
@@ -234,20 +237,20 @@ export const HistoryAPI = {
   }
 };
 
-// === CHAT (Sensa AI) ===
-export const ChatAPI = {
-  // POST /chat/submit
-  send: async (userMessage) => {
-    const res = await api.post('/chat/submit', { userMessage });
+// === SUMMARY ===
+export const SummaryAPI = {
+  // POST /summaries
+  get: async () => {
+    const res = await api.post('/summaries');
     return res;
   },
 };
 
-// === SUMMARY ===
-export const SummaryAPI = {
-  // GET /summary
-  get: async () => {
-    const res = await api.get('/summary');
+// === ACTIVITIES ===
+export const ActivitiesAPI = {
+  // GET /activities
+  getRecent: async () => {
+    const res = await api.get('/activities');
     return res;
   },
 };

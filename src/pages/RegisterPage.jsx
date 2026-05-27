@@ -28,10 +28,9 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [customAge, setCustomAge] = useState(false);
-  const [customJobRole, setCustomJobRole] = useState(false);
   const [customExperience, setCustomExperience] = useState(false);
 
-  const ageOptions = [18, 21, 25, 30, 35, 40, 45, 50];
+  const ageOptions = [22, 25, 30, 35, 40, 45, 50, 55];
   const experienceOptions = [1, 2, 3, 5];
 
   const genderOptions = [
@@ -44,10 +43,17 @@ export default function RegisterPage() {
   const jobRoleOptions = [
     { value: 'Analyst', label: 'Analyst', icon: 'analytics' },
     { value: 'Engineer', label: 'Engineer', icon: 'code' },
-    { value: 'Developer', label: 'Developer', icon: 'integration_instructions' },
+    { value: 'Software Engineer', label: 'Software Engineer', icon: 'integration_instructions' },
+    { value: 'Data Scientist', label: 'Data Scientist', icon: 'science' },
     { value: 'Manager', label: 'Manager', icon: 'supervisor_account' },
+    { value: 'Project Manager', label: 'Project Manager', icon: 'assignment' },
+    { value: 'Marketing Manager', label: 'Marketing Manager', icon: 'campaign' },
     { value: 'Sales', label: 'Sales', icon: 'storefront' },
+    { value: 'Sales Associate', label: 'Sales Associate', icon: 'point_of_sale' },
     { value: 'HR', label: 'HR', icon: 'badge' },
+    { value: 'HR Specialist', label: 'HR Specialist', icon: 'groups' },
+    { value: 'IT Admin', label: 'IT Admin', icon: 'admin_panel_settings' },
+    { value: 'Customer Support', label: 'Customer Support', icon: 'support_agent' },
   ];
 
   const validateStep1 = () => {
@@ -221,35 +227,17 @@ export default function RegisterPage() {
                   <label className="block font-semibold text-sm tracking-[0.05em] text-[#1a1c1a] mb-2 ml-1 flex items-center gap-1.5">
                     <span className="material-symbols-outlined text-[16px] text-[#456551]">work</span>Peran Pekerjaan
                   </label>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 max-h-[200px] overflow-y-auto scrollbar-hide">
                     {jobRoleOptions.map((opt) => {
-                      const isSelected = !customJobRole && form.job_role === opt.value;
+                      const isSelected = form.job_role === opt.value;
                       return (
-                        <motion.button key={opt.value} type="button" onClick={() => { setForm({ ...form, job_role: opt.value }); setCustomJobRole(false); }} className={`px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border-2 font-medium text-xs sm:text-sm text-left flex items-center gap-2 sm:gap-3 transition-all duration-200 ${isSelected ? 'bg-[#456551] text-white border-[#456551] shadow-md' : 'bg-white/60 text-[#1a1c1a] border-[#c2c8c1]/30 hover:border-[#7c9e87] hover:bg-white'}`} whileHover={{ x: 3 }} whileTap={{ scale: 0.98 }}>
+                        <motion.button key={opt.value} type="button" onClick={() => setForm({ ...form, job_role: opt.value })} className={`px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border-2 font-medium text-xs sm:text-sm text-left flex items-center gap-2 sm:gap-3 transition-all duration-200 ${isSelected ? 'bg-[#456551] text-white border-[#456551] shadow-md' : 'bg-white/60 text-[#1a1c1a] border-[#c2c8c1]/30 hover:border-[#7c9e87] hover:bg-white'}`} whileHover={{ x: 3 }} whileTap={{ scale: 0.98 }}>
                           <span className={`material-symbols-outlined text-[18px] sm:text-[20px] ${isSelected ? 'text-white' : 'text-[#456551]'}`}>{opt.icon}</span>
                           <span>{opt.label}</span>
                         </motion.button>
                       );
                     })}
                   </div>
-                  <motion.button
-                    type="button"
-                    onClick={() => { setCustomJobRole(true); setForm({ ...form, job_role: '' }); }}
-                    className={`mt-2 w-full py-2.5 sm:py-3 rounded-xl border-2 border-dashed font-medium text-xs sm:text-sm flex items-center justify-center gap-2 transition-all ${customJobRole ? 'bg-[#456551] text-white border-[#456551]' : 'bg-white/40 text-[#456551] border-[#7c9e87]/50 hover:border-[#456551]'}`}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <span className="material-symbols-outlined text-[16px]">edit</span>Lainnya (isi manual)
-                  </motion.button>
-                  <AnimatePresence>
-                    {customJobRole && (
-                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mt-2 overflow-hidden">
-                        <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#727973]/60 group-focus-within:text-[#456551] transition-colors">work</span>
-                          <input type="text" autoFocus placeholder="Ketik peran pekerjaanmu" value={form.job_role} onChange={e => setForm({ ...form, job_role: e.target.value })} className={inputClass} />
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                   {errors.job_role && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-[#ba1a1a] mt-1 ml-1">{errors.job_role}</motion.p>}
                 </div>
 
