@@ -37,7 +37,7 @@ export default function HistoryPage() {
   const lastCheckDate = totalChecks > 0 ? new Date(history[0].created_at).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }) : '—';
   const healthyCount = history.filter(h => {
     const label = (h.class_label || h.burnout_label || '').toLowerCase();
-    return label === 'low' || h.burnout_class === 0;
+    return h.burnout_class === 0 || label.includes('low') || label.includes('tidak');
   }).length;
   const healthyPercent = totalChecks > 0 ? Math.round((healthyCount / totalChecks) * 100) : 0;
 

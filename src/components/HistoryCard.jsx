@@ -15,9 +15,9 @@ export default function HistoryCard({ item, onClick }) {
     const cls = item.burnout_class;
     
     let level;
-    if (label === 'high' || cls === 2) {
+    if (cls === 2 || label.includes('high') || (label.includes('burnout') && !label.includes('akan'))) {
       level = 'high';
-    } else if (label === 'moderate' || cls === 1) {
+    } else if (cls === 1 || label.includes('moderate') || label.includes('akan')) {
       level = 'moderate';
     } else {
       level = 'low';
