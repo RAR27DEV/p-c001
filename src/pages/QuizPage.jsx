@@ -50,7 +50,9 @@ export default function QuizPage() {
         manager_support: parseInt(answers.manager_support) || 3,
         has_mental_health_support: answers.has_mental_health_support || "No",
       };
+      console.log('📤 Quiz payload yang dikirim ke backend:', JSON.stringify(payload, null, 2));
       const res = await QuizAPI.submitResult(payload);
+      console.log('📥 Response dari backend:', JSON.stringify(res.data, null, 2));
       // Backend returns { status, result: { burnout_class, burnout_label, confidence_score, ... } }
       const result = res.data.result || res.data;
       navigate('/result', { state: { result: { ...result, type: 'quiz' } } });
