@@ -41,7 +41,7 @@ export default function QuizPage() {
     try {
       const payload = {
         work_hours_per_week: parseInt(answers.work_hours_per_week) || 40,
-        remote_ratio: parseInt(answers.remote_ratio) ?? 2,
+        remote_ratio: parseInt(answers.remote_ratio) || 0,
         satisfaction_score: parseInt(answers.satisfaction_score) || 3,
         stress_score: parseInt(answers.stress_score) || 5,
         work_life_balance: parseInt(answers.work_life_balance) || 5,
@@ -50,7 +50,10 @@ export default function QuizPage() {
         manager_support: parseInt(answers.manager_support) || 3,
         has_mental_health_support: answers.has_mental_health_support || "No",
       };
+      console.log('📤 RAW answers state:', JSON.stringify(answers, null, 2));
+      console.log('📤 PAYLOAD yang dikirim:', JSON.stringify(payload, null, 2));
       const res = await QuizAPI.submitResult(payload);
+      console.log('📥 RESPONSE backend:', JSON.stringify(res.data, null, 2));
       // Backend returns { status, message, data: { burnout_class, class_label, topfactor_attributions, class_propabilities } }
       const result = res.data.data || res.data.result || res.data;
       navigate('/result', { state: { result: { ...result, type: 'quiz' } } });

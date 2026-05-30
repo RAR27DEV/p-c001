@@ -10,13 +10,13 @@ export default function HistoryCard({ item, onClick }) {
   const formattedTime = dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
   const getLevelInfo = (item) => {
-    // Backend uses burnout_class (0=Low, 1=Moderate, 2=High) or burnout_label
+    // Backend uses burnout_class (0=Low, 1=Moderate/High) 
     const label = (item.class_label || item.prediction || '').toLowerCase();
     const cls = item.burnout_class;
-    const score = parseFloat(item.class_propabilities?.resultScore) || 0;
+    const burnoutProb = parseFloat(item.class_propabilities?.['1']) || item.confidence || 0;
     
     let level;
-    if (cls === 2 || label === 'burnout') {
+    if (cls === 2 || (cls === 1 && burnoutProb >= 0.85) || label === 'burnout') {
       level = 'high';
     } else if (cls === 1 || label === 'akan burnout') {
       level = 'moderate';
@@ -30,10 +30,10 @@ export default function HistoryCard({ item, onClick }) {
   };
 
   const info = getLevelInfo(item);
-  // Backend field: class_propabilities.resultScore (0-100) or confidence (0-1)
-  const resultScore = parseFloat(item.class_propabilities?.resultScore) || (item.confidence ? Math.round(item.confidence * 100) : 0);
-  const scorePercent = Math.min(resultScore, 100);
-  const displayScore = `${Math.round(resultScore)}%`;
+  // Skor: gunakan probability class 1 (0-100%) — lebih meaningful
+  const burnoutProb = parseFloat(item.class_propabilities?.['1']) || item.confidence || 0;
+  const scorePercent = Math.round(burnoutProb * 100);
+  const displayScore = `${scorePercent}%`;
 
   return (
     <HoverCard className="h-full">

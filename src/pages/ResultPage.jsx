@@ -26,15 +26,19 @@ export default function ResultPage() {
   }
 
   // Backend response format:
-  // Quiz: { burnout_class (0|1), class_label, topfactor_attributions, class_propabilities: { 0, 1, resultScore } }
+  // Quiz: { burnout_class (0|1), class_label, topfactor_attributions, class_propabilities: { 0, 1, 2, resultScore } }
   // Scan: { prediction, confidence, face_detected, face_confidence }
   const label = (result.class_label || result.prediction || '').toLowerCase();
   const burnoutClass = result.burnout_class;
   const resultScore = parseFloat(result.class_propabilities?.resultScore) || (result.confidence ? result.confidence * 100 : 0);
+  
+  // Probability burnout (class 1) — lebih meaningful dari resultScore
+  const burnoutProb = parseFloat(result.class_propabilities?.['1']) || result.confidence || 0;
+  const burnoutScore = Math.round(burnoutProb * 100);
 
-  // 3 class dari backend: 0 = Tidak Burnout, 1 = Akan Burnout, 2 = Burnout
-  const isHighRisk = burnoutClass === 2 || label === 'burnout';
-  const isWarning = burnoutClass === 1 || label === 'akan burnout';
+  // Interpretasi: class 1 dengan prob >= 85% = Burnout (karena class 2 gak pernah muncul dari model)
+  const isHighRisk = burnoutClass === 2 || (burnoutClass === 1 && burnoutProb >= 0.85) || label === 'burnout';
+  const isWarning = !isHighRisk && (burnoutClass === 1 || label === 'akan burnout');
 
   const title = isHighRisk ? "Burnout" : isWarning ? "Akan Burnout" : "Tidak Burnout";
   const badgeLabel = isHighRisk ? "BURNOUT" : isWarning ? "AKAN BURNOUT" : "TIDAK BURNOUT";
@@ -42,7 +46,6 @@ export default function ResultPage() {
   const illustration = isHighRisk ? imgTinggi : isWarning ? imgSedang : imgRendah;
   const illustrationLabel = isHighRisk ? "BURNOUT" : isWarning ? "AKAN BURNOUT" : "TIDAK BURNOUT";
 
-  // Score bars based on resultScore (0-100) — used for burnout score bar
   // Top factors from backend
   const topFactors = result.topfactor_attributions || [];
 
@@ -123,10 +126,11 @@ export default function ResultPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-1.5">
+            <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-1.5 mb-1">
               <span className="material-symbols-outlined text-[16px] text-[#456551]">analytics</span>
-              Faktor Utama
+              Faktor yang Mempengaruhi
             </h4>
+            <p className="text-[11px] text-gray-400 mb-4">Faktor dari jawabanmu yang paling berpengaruh terhadap hasil.</p>
             {topFactors.length > 0 ? (
               topFactors.map((factor, idx) => {
                 const absValue = Math.abs(factor.value);
@@ -157,15 +161,18 @@ export default function ResultPage() {
                   manager_support_was_imputed: 'Dukungan Atasan (Imputasi)',
                 };
                 const displayLabel = labelMap[factor.key] || factor.key.replace(/_/g, ' ');
+                const explanation = isNegative
+                  ? "Memperburuk kondisi burnout"
+                  : "Melindungi dari burnout";
                 return (
-                  <div key={idx} className="flex flex-col gap-1.5">
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700 font-medium">{displayLabel}</span>
-                      <span className={`text-xs font-semibold ${isNegative ? 'text-red-500' : 'text-green-600'}`}>
-                        {isNegative ? '↑ Meningkatkan' : '↓ Mengurangi'}
+                  <div key={idx} className="flex flex-col gap-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-700 font-medium">{displayLabel}</span>
+                      <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${isNegative ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-700'}`}>
+                        {isNegative ? '⚠ Penyebab' : '✓ Pelindung'}
                       </span>
                     </div>
-                    <div className="h-2.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
                       <motion.div
                         className="h-full rounded-full"
                         style={{ backgroundColor: color }}
@@ -174,6 +181,7 @@ export default function ResultPage() {
                         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.6 + idx * 0.12 }}
                       />
                     </div>
+                    <p className="text-[10px] text-gray-400">{explanation}</p>
                   </div>
                 );
               })
@@ -181,24 +189,29 @@ export default function ResultPage() {
               <p className="text-xs text-gray-400">Data faktor tidak tersedia untuk hasil ini.</p>
             )}
 
-            {/* Burnout Score */}
-            {resultScore > 0 && (
-              <div className="mt-2 pt-3 border-t border-gray-100">
+            {/* Burnout Score — selalu tampil */}
+            <div className="mt-2 pt-3 border-t border-gray-100">
                 <div className="flex justify-between items-center text-sm mb-1.5">
                   <span className="text-gray-700 font-semibold">Skor Burnout</span>
-                  <span className={`font-bold ${isHighRisk ? 'text-red-500' : 'text-green-600'}`}>{Math.round(resultScore)}%</span>
+                  <span className={`font-bold ${isHighRisk ? 'text-red-500' : isWarning ? 'text-amber-500' : 'text-green-600'}`}>{burnoutScore}%</span>
                 </div>
                 <div className="h-3 w-full bg-gray-100 rounded-full overflow-hidden">
                   <motion.div
                     className="h-full rounded-full"
                     style={{ backgroundColor: isHighRisk ? '#ef4444' : isWarning ? '#f59e0b' : '#22c55e' }}
                     initial={{ width: 0 }}
-                    animate={{ width: `${Math.min(resultScore, 100)}%` }}
+                    animate={{ width: `${Math.min(burnoutScore, 100)}%` }}
                     transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
                   />
                 </div>
+                <p className="text-[11px] text-gray-400 mt-2">
+                  {burnoutScore >= 85 
+                    ? "Skor sangat tinggi — model AI sangat yakin kamu mengalami burnout."
+                    : burnoutScore >= 50
+                      ? "Skor menunjukkan kecenderungan burnout. Perhatikan faktor-faktor di atas."
+                      : "Skor relatif rendah. Tetap jaga keseimbangan hidupmu."}
+                </p>
               </div>
-            )}
           </motion.div>
 
           {/* Recommendations */}

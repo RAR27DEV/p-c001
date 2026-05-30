@@ -101,7 +101,7 @@ export const QuizAPI = {
               { value: 3, label_id: "Jarang (3-4)" },
               { value: 5, label_id: "Kadang-kadang (5-6)" },
               { value: 7, label_id: "Sering (7-8)" },
-              { value: 9, label_id: "Sangat sering (9-10)" }
+              { value: 10, label_id: "Sangat sering (9-10)" }
             ]
           },
           {
