@@ -42,10 +42,9 @@ export default function ResultPage() {
   const illustration = isHighRisk ? imgTinggi : isWarning ? imgSedang : imgRendah;
   const illustrationLabel = isHighRisk ? "BURNOUT DETECTED" : isWarning ? "MODERATE RISK" : "NO BURNOUT";
 
-  // Score bars based on resultScore (0-100)
-  const fatiguePercent = Math.min(Math.round(resultScore), 100);
-  const stressPercent = Math.min(Math.round(resultScore * 0.75), 100);
-  const anxietyPercent = Math.min(Math.round(resultScore * 0.5), 100);
+  // Score bars based on resultScore (0-100) — used for burnout score bar
+  // Top factors from backend
+  const topFactors = result.topfactor_attributions || [];
 
   const description = result.description
     || (isHighRisk
@@ -59,9 +58,6 @@ export default function ResultPage() {
     : isWarning
       ? "Tanda-tanda burnout terdeteksi. Pertimbangkan jeda, atur ulang prioritas, dan bicara dengan seseorang yang kamu percaya."
       : "Tingkat stres Anda terlihat sehat. Terus pertahankan keseimbangan dan rutinitas positifmu!";
-
-  // Top factors from backend
-  const topFactors = result.topfactor_attributions || [];
 
   return (
     <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col items-center justify-center px-4 py-8" style={{ fontFamily: "'Manrope', sans-serif" }}>
@@ -120,34 +116,79 @@ export default function ResultPage() {
           {/* Description */}
           <p className="text-sm text-gray-500 mb-8 max-w-xs">{description}</p>
 
-          {/* Score Bars */}
+          {/* Top Factors — dari backend */}
           <motion.div
             className="w-full flex flex-col gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            {[
-              { label: "Lelah (Fatigue)", percent: fatiguePercent, color: '#22c55e' },
-              { label: "Stres (Stress)", percent: stressPercent, color: '#6366f1' },
-              { label: "Cemas (Anxiety)", percent: anxietyPercent, color: '#06b6d4' },
-            ].map((bar, idx) => (
-              <div key={idx} className="flex flex-col gap-1.5">
-                <div className="flex justify-between items-center text-sm font-medium">
-                  <span className="text-gray-700">{bar.label}</span>
-                  <span className="text-gray-500">{bar.percent}%</span>
+            <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[16px] text-[#456551]">analytics</span>
+              Faktor Utama
+            </h4>
+            {topFactors.length > 0 ? (
+              topFactors.map((factor, idx) => {
+                const absValue = Math.abs(factor.value);
+                const percent = Math.min(Math.round(absValue * 100), 100);
+                const isNegative = factor.direction === 'increases_burnout';
+                const color = isNegative ? '#ef4444' : '#22c55e';
+                const labelMap = {
+                  stress_score: 'Tingkat Stres',
+                  sleep_hours: 'Jam Tidur',
+                  work_life_balance: 'Work-Life Balance',
+                  manager_support: 'Dukungan Atasan',
+                  work_hours_per_week: 'Jam Kerja/Minggu',
+                  physical_activity_hrs: 'Aktivitas Fisik',
+                  satisfaction_score: 'Kepuasan Kerja',
+                  remote_ratio: 'Rasio Remote',
+                  years_experience: 'Pengalaman Kerja',
+                  age: 'Usia',
+                  has_mental_health_support: 'Dukungan Kesehatan Mental',
+                };
+                const displayLabel = labelMap[factor.key] || factor.key.replace(/_/g, ' ');
+                return (
+                  <div key={idx} className="flex flex-col gap-1.5">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700 font-medium">{displayLabel}</span>
+                      <span className={`text-xs font-semibold ${isNegative ? 'text-red-500' : 'text-green-600'}`}>
+                        {isNegative ? '↑ Meningkatkan' : '↓ Mengurangi'}
+                      </span>
+                    </div>
+                    <div className="h-2.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                      <motion.div
+                        className="h-full rounded-full"
+                        style={{ backgroundColor: color }}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${percent}%` }}
+                        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.6 + idx * 0.12 }}
+                      />
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <p className="text-xs text-gray-400">Data faktor tidak tersedia untuk hasil ini.</p>
+            )}
+
+            {/* Burnout Score */}
+            {resultScore > 0 && (
+              <div className="mt-2 pt-3 border-t border-gray-100">
+                <div className="flex justify-between items-center text-sm mb-1.5">
+                  <span className="text-gray-700 font-semibold">Skor Burnout</span>
+                  <span className={`font-bold ${isHighRisk ? 'text-red-500' : 'text-green-600'}`}>{Math.round(resultScore)}%</span>
                 </div>
-                <div className="h-2.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-3 w-full bg-gray-100 rounded-full overflow-hidden">
                   <motion.div
                     className="h-full rounded-full"
-                    style={{ backgroundColor: bar.color }}
+                    style={{ backgroundColor: isHighRisk ? '#ef4444' : isWarning ? '#f59e0b' : '#22c55e' }}
                     initial={{ width: 0 }}
-                    animate={{ width: `${bar.percent}%` }}
-                    transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.6 + idx * 0.15 }}
+                    animate={{ width: `${Math.min(resultScore, 100)}%` }}
+                    transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
                   />
                 </div>
               </div>
-            ))}
+            )}
           </motion.div>
 
           {/* Recommendations */}
