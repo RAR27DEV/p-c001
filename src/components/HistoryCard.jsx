@@ -13,12 +13,18 @@ export default function HistoryCard({ item, onClick }) {
     // Backend uses burnout_class (0=Low, 1=Moderate/High) 
     const label = (item.class_label || item.prediction || '').toLowerCase();
     const cls = item.burnout_class;
-    const burnoutProb = parseFloat(item.class_propabilities?.['1']) || item.confidence || 0;
+    const isScan = item.type === 'scan' || item.prediction !== undefined;
+    let prob;
+    if (isScan) {
+      prob = 1 - (item.confidence || 0.5);
+    } else {
+      prob = parseFloat(item.class_propabilities?.['1']) || 0;
+    }
     
     let level;
-    if (cls === 2 || (cls === 1 && burnoutProb >= 0.85) || label === 'burnout') {
+    if (cls === 2 || (cls === 1 && prob >= 0.85) || (label === 'burnout' && prob >= 0.5)) {
       level = 'high';
-    } else if (cls === 1 || label === 'akan burnout') {
+    } else if (cls === 1 || label === 'akan burnout' || (prob >= 0.4 && prob < 0.85 && label !== 'tidak burnout')) {
       level = 'moderate';
     } else {
       level = 'low';
@@ -30,9 +36,15 @@ export default function HistoryCard({ item, onClick }) {
   };
 
   const info = getLevelInfo(item);
-  // Skor: gunakan probability class 1 (0-100%) — lebih meaningful
-  const burnoutProb = parseFloat(item.class_propabilities?.['1']) || item.confidence || 0;
-  const scorePercent = Math.round(burnoutProb * 100);
+  // Skor: untuk scan invert confidence (confidence = prob tidak burnout)
+  const isScanItem = item.type === 'scan' || item.prediction !== undefined;
+  let burnoutProbItem;
+  if (isScanItem) {
+    burnoutProbItem = 1 - (item.confidence || 0.5);
+  } else {
+    burnoutProbItem = parseFloat(item.class_propabilities?.['1']) || 0;
+  }
+  const scorePercent = Math.round(burnoutProbItem * 100);
   const displayScore = `${scorePercent}%`;
 
   return (
@@ -69,24 +81,30 @@ export default function HistoryCard({ item, onClick }) {
           </div>
         )}
 
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-baseline justify-between">
-            <span className="text-[13px] font-medium text-[#727973]">Skor Burnout</span>
-            <span className="text-[20px] font-bold text-[#1a1c1a]" style={{ fontFamily: "'Newsreader', serif" }}>
-              {displayScore}
+        {/* Score bar — hanya untuk quiz */}
+        {isQuiz && (
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-baseline justify-between">
+              <span className="text-[13px] font-medium text-[#727973]">Skor Burnout</span>
+              <span className="text-[20px] font-bold text-[#1a1c1a]" style={{ fontFamily: "'Newsreader', serif" }}>
+                {displayScore}
+              </span>
+            </div>
+            <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+              <motion.div className="h-full rounded-full" style={{ backgroundColor: info.barColor }} initial={{ width: 0 }} whileInView={{ width: `${scorePercent}%` }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} />
+            </div>
+          </div>
+        )}
+
+        {/* Lihat Detail — hanya untuk quiz */}
+        {isQuiz && (
+          <div className="flex items-center justify-end mt-auto pt-2">
+            <span className="text-[#456551] font-semibold text-[13px] flex items-center gap-1 opacity-50 group-hover:opacity-100 transition-all duration-300">
+              Lihat Detail
+              <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform duration-300">arrow_forward</span>
             </span>
           </div>
-          <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-            <motion.div className="h-full rounded-full" style={{ backgroundColor: info.barColor }} initial={{ width: 0 }} whileInView={{ width: `${scorePercent}%` }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-end mt-auto pt-2">
-          <span className="text-[#456551] font-semibold text-[13px] flex items-center gap-1 opacity-50 group-hover:opacity-100 transition-all duration-300">
-            Lihat Detail
-            <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform duration-300">arrow_forward</span>
-          </span>
-        </div>
+        )}
       </article>
     </HoverCard>
   );

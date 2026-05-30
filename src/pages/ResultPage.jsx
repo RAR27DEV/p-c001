@@ -27,18 +27,25 @@ export default function ResultPage() {
 
   // Backend response format:
   // Quiz: { burnout_class (0|1), class_label, topfactor_attributions, class_propabilities: { 0, 1, 2, resultScore } }
-  // Scan: { prediction, confidence, face_detected, face_confidence }
+  // Scan: { prediction, confidence (= prob "Tidak Burnout"), face_detected, face_confidence }
   const label = (result.class_label || result.prediction || '').toLowerCase();
   const burnoutClass = result.burnout_class;
-  const resultScore = parseFloat(result.class_propabilities?.resultScore) || (result.confidence ? result.confidence * 100 : 0);
+  const isScan = result.type === 'scan' || result.face_detected !== undefined;
   
-  // Probability burnout (class 1) — lebih meaningful dari resultScore
-  const burnoutProb = parseFloat(result.class_propabilities?.['1']) || result.confidence || 0;
+  // Untuk scan: confidence dari backend = probability "Tidak Burnout"
+  // Jadi burnout probability = 1 - confidence
+  // Untuk quiz: gunakan class_propabilities['1']
+  let burnoutProb;
+  if (isScan) {
+    burnoutProb = 1 - (result.confidence || 0.5);
+  } else {
+    burnoutProb = parseFloat(result.class_propabilities?.['1']) || 0;
+  }
   const burnoutScore = Math.round(burnoutProb * 100);
 
-  // Interpretasi: class 1 dengan prob >= 85% = Burnout (karena class 2 gak pernah muncul dari model)
-  const isHighRisk = burnoutClass === 2 || (burnoutClass === 1 && burnoutProb >= 0.85) || label === 'burnout';
-  const isWarning = !isHighRisk && (burnoutClass === 1 || label === 'akan burnout');
+  // Interpretasi
+  const isHighRisk = burnoutClass === 2 || (burnoutClass === 1 && burnoutProb >= 0.85) || (label === 'burnout' && burnoutProb >= 0.5);
+  const isWarning = !isHighRisk && (burnoutClass === 1 || label === 'akan burnout' || (burnoutProb >= 0.4 && burnoutProb < 0.85 && label !== 'tidak burnout'));
 
   const title = isHighRisk ? "Burnout" : isWarning ? "Akan Burnout" : "Tidak Burnout";
   const badgeLabel = isHighRisk ? "BURNOUT" : isWarning ? "AKAN BURNOUT" : "TIDAK BURNOUT";
@@ -186,7 +193,18 @@ export default function ResultPage() {
                 );
               })
             ) : (
-              <p className="text-xs text-gray-400">Data faktor tidak tersedia untuk hasil ini.</p>
+              <div className="text-center py-3">
+                {isScan ? (
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-500">Analisis berdasarkan ekspresi wajah menggunakan AI.</p>
+                    {result.face_confidence && (
+                      <p className="text-xs text-gray-400">Akurasi deteksi wajah: {Math.round((result.face_confidence || 0) * 100)}%</p>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-400">Data faktor tidak tersedia untuk hasil ini.</p>
+                )}
+              </div>
             )}
 
             {/* Burnout Score — selalu tampil */}

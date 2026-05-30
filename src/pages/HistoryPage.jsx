@@ -174,6 +174,8 @@ export default function HistoryPage() {
               {filteredHistory.map((item, idx) => (
                 <FadeInView key={item.id} delay={0.15 + idx * 0.06}>
                   <HistoryCard item={item} onClick={async () => {
+                    // Scan gak perlu detail
+                    if (item.type === 'scan') return;
                     try {
                       if (item.type === 'quiz' && item.id) {
                         const detail = await QuizAPI.getHistoryDetail(item.id);
