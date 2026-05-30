@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { HistoryAPI } from '../services/api';
+import { HistoryAPI, QuizAPI } from '../services/api';
 import Navbar from '../components/Navbar';
 import HistoryCard from '../components/HistoryCard';
 import { PageTransition, FadeInView, HoverCard } from '../components/PageTransition';
@@ -174,7 +174,19 @@ export default function HistoryPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {filteredHistory.map((item, idx) => (
                 <FadeInView key={item.id} delay={0.15 + idx * 0.06}>
-                  <HistoryCard item={item} onClick={() => navigate('/result', { state: { result: item } })} />
+                  <HistoryCard item={item} onClick={async () => {
+                    try {
+                      if (item.type === 'quiz' && item.id) {
+                        const detail = await QuizAPI.getHistoryDetail(item.id);
+                        const fullData = detail.data.data || detail.data;
+                        navigate('/result', { state: { result: { ...fullData, type: 'quiz' } } });
+                      } else {
+                        navigate('/result', { state: { result: item } });
+                      }
+                    } catch {
+                      navigate('/result', { state: { result: item } });
+                    }
+                  }} />
                 </FadeInView>
               ))}
             </div>

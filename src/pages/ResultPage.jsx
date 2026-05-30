@@ -145,6 +145,16 @@ export default function ResultPage() {
                   years_experience: 'Pengalaman Kerja',
                   age: 'Usia',
                   has_mental_health_support: 'Dukungan Kesehatan Mental',
+                  stress_sleep_ratio: 'Rasio Stres-Tidur',
+                  work_overload_stress: 'Beban Kerja Berlebih',
+                  support_deficit: 'Kurangnya Dukungan',
+                  satisfaction_stress_gap: 'Gap Kepuasan-Stres',
+                  recovery_score: 'Skor Pemulihan',
+                  stress_score_was_imputed: 'Stres (Imputasi)',
+                  sleep_hours_was_imputed: 'Tidur (Imputasi)',
+                  physical_activity_hrs_was_imputed: 'Aktivitas Fisik (Imputasi)',
+                  work_life_balance_was_imputed: 'Work-Life Balance (Imputasi)',
+                  manager_support_was_imputed: 'Dukungan Atasan (Imputasi)',
                 };
                 const displayLabel = labelMap[factor.key] || factor.key.replace(/_/g, ' ');
                 return (
