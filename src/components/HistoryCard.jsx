@@ -16,16 +16,16 @@ export default function HistoryCard({ item, onClick }) {
     const score = parseFloat(item.class_propabilities?.resultScore) || 0;
     
     let level;
-    if (cls === 1 || label === 'burnout' || score >= 60) {
+    if (cls === 2 || label === 'burnout') {
       level = 'high';
-    } else if (label === 'akan burnout' || label === 'moderate' || (score >= 30 && score < 60)) {
+    } else if (cls === 1 || label === 'akan burnout') {
       level = 'moderate';
     } else {
       level = 'low';
     }
     
     if (level === 'high') return { level: 'Burnout', badgeBg: 'bg-[#ffdad6]', badgeText: 'text-[#93000a]', dotColor: '#ba1a1a', barColor: '#ba1a1a', icon: 'sentiment_stressed', iconBg: 'bg-[#ffdad6]/40', iconColor: 'text-[#ba1a1a]' };
-    if (level === 'moderate') return { level: 'Sedang', badgeBg: 'bg-[#FFF5D1]', badgeText: 'text-[#7A6000]', dotColor: '#D4A700', barColor: '#D4A700', icon: 'sentiment_neutral', iconBg: 'bg-[#FFF5D1]/60', iconColor: 'text-[#D4A700]' };
+    if (level === 'moderate') return { level: 'Akan Burnout', badgeBg: 'bg-[#FFF5D1]', badgeText: 'text-[#7A6000]', dotColor: '#D4A700', barColor: '#D4A700', icon: 'sentiment_neutral', iconBg: 'bg-[#FFF5D1]/60', iconColor: 'text-[#D4A700]' };
     return { level: 'Sehat', badgeBg: 'bg-[#c7ebd1]', badgeText: 'text-[#012111]', dotColor: '#456551', barColor: '#456551', icon: 'sentiment_satisfied', iconBg: 'bg-[#c7ebd1]/40', iconColor: 'text-[#456551]' };
   };
 

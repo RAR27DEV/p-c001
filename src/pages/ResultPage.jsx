@@ -32,15 +32,15 @@ export default function ResultPage() {
   const burnoutClass = result.burnout_class;
   const resultScore = parseFloat(result.class_propabilities?.resultScore) || (result.confidence ? result.confidence * 100 : 0);
 
-  // 2 class: "Burnout" (class 1) dan "Tidak Burnout" (class 0)
-  const isHighRisk = burnoutClass === 1 || label === 'burnout' || resultScore >= 60;
-  const isWarning = !isHighRisk && (label === 'akan burnout' || label === 'moderate' || (resultScore >= 30 && resultScore < 60));
+  // 3 class dari backend: 0 = Tidak Burnout, 1 = Akan Burnout, 2 = Burnout
+  const isHighRisk = burnoutClass === 2 || label === 'burnout';
+  const isWarning = burnoutClass === 1 || label === 'akan burnout';
 
-  const title = isHighRisk ? "Burnout Terdeteksi" : isWarning ? "Risiko Sedang" : "Tidak Burnout";
-  const badgeLabel = isHighRisk ? "BURNOUT" : isWarning ? "RISIKO SEDANG" : "TIDAK BURNOUT";
+  const title = isHighRisk ? "Burnout" : isWarning ? "Akan Burnout" : "Tidak Burnout";
+  const badgeLabel = isHighRisk ? "BURNOUT" : isWarning ? "AKAN BURNOUT" : "TIDAK BURNOUT";
   const badgeColor = isHighRisk ? 'bg-red-50 text-red-600 border-red-200' : isWarning ? 'bg-amber-50 text-amber-600 border-amber-200' : 'bg-green-50 text-[#15803d] border-green-200';
   const illustration = isHighRisk ? imgTinggi : isWarning ? imgSedang : imgRendah;
-  const illustrationLabel = isHighRisk ? "BURNOUT DETECTED" : isWarning ? "MODERATE RISK" : "NO BURNOUT";
+  const illustrationLabel = isHighRisk ? "BURNOUT" : isWarning ? "AKAN BURNOUT" : "TIDAK BURNOUT";
 
   // Score bars based on resultScore (0-100) — used for burnout score bar
   // Top factors from backend
@@ -48,16 +48,16 @@ export default function ResultPage() {
 
   const description = result.description
     || (isHighRisk
-      ? "Burnout terdeteksi. Kondisimu menunjukkan tanda-tanda kelelahan yang signifikan."
+      ? "Burnout terdeteksi. Kondisimu menunjukkan kelelahan yang signifikan."
       : isWarning
-        ? "Kamu menunjukkan tanda-tanda menuju burnout. Perhatikan kondisimu."
+        ? "Kamu menunjukkan tanda-tanda menuju burnout. Segera perhatikan kondisimu."
         : "Kondisimu terlihat sehat dan seimbang.");
 
   const recommendation = isHighRisk
-    ? "Tingkat kelelahan tinggi terdeteksi. Pertimbangkan untuk mengambil hari istirahat penuh dan berkonsultasi dengan profesional."
+    ? "Burnout terdeteksi. Pertimbangkan untuk mengambil istirahat penuh dan berkonsultasi dengan profesional."
     : isWarning
-      ? "Tanda-tanda burnout terdeteksi. Pertimbangkan jeda, atur ulang prioritas, dan bicara dengan seseorang yang kamu percaya."
-      : "Tingkat stres Anda terlihat sehat. Terus pertahankan keseimbangan dan rutinitas positifmu!";
+      ? "Tanda-tanda burnout mulai muncul. Atur ulang prioritas, ambil jeda, dan bicara dengan seseorang yang kamu percaya."
+      : "Kondisimu baik. Terus pertahankan keseimbangan dan rutinitas positifmu!";
 
   return (
     <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col items-center justify-center px-4 py-8" style={{ fontFamily: "'Manrope', sans-serif" }}>
