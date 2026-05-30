@@ -91,8 +91,7 @@ export default function ScanPage() {
       const file = new File([byteArray], 'scan.jpg', { type: 'image/jpeg' });
 
       const res = await ScanAPI.analyze(file);
-      console.log('📥 Scan response dari backend:', JSON.stringify(res.data, null, 2));
-      // Backend scan returns: { status, result: { emotion, confidence, ... } }
+      // Backend scan returns: { status, result: { prediction, confidence, face_detected } }
       const result = res.data.result || res.data.data || res.data;
       // Matikan kamera sebelum pindah halaman
       if (stream) {

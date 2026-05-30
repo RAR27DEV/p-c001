@@ -26,32 +26,30 @@ export default function ResultPage() {
   }
 
   // Backend response format:
-  // Quiz: { burnout_class, class_label, confidence, feature_attributions }
+  // Quiz: { burnout_class (0|1), class_label, topfactor_attributions, class_propabilities: { 0, 1, resultScore } }
   // Scan: { prediction, confidence, face_detected, face_confidence }
-  console.log('🔍 ResultPage received:', JSON.stringify(result, null, 2));
-  const label = (result.class_label || result.prediction || result.burnout_label || '').toLowerCase();
+  const label = (result.class_label || result.prediction || '').toLowerCase();
   const burnoutClass = result.burnout_class;
-  const confidence = result.confidence || result.confidence_score || 0;
-  console.log('🔍 Parsed: label=', label, 'burnoutClass=', burnoutClass, 'confidence=', confidence);
+  const resultScore = parseFloat(result.class_propabilities?.resultScore) || (result.confidence ? result.confidence * 100 : 0);
 
-  // Detect level — support English, Indonesian, and scan prediction
-  const isHighRisk = burnoutClass === 2 || label === 'burnout' || label === 'high';
-  const isWarning = burnoutClass === 1 || label === 'akan burnout' || label === 'moderate';
+  // 2 class: "Burnout" (class 1) dan "Tidak Burnout" (class 0)
+  const isHighRisk = burnoutClass === 1 || label === 'burnout' || resultScore >= 60;
+  const isWarning = !isHighRisk && (label === 'akan burnout' || label === 'moderate' || (resultScore >= 30 && resultScore < 60));
 
-  const title = isHighRisk ? "Risiko Burnout Tinggi" : isWarning ? "Akan Burnout" : "Risiko Burnout Rendah";
-  const badgeLabel = isHighRisk ? "RISIKO BURNOUT TINGGI" : isWarning ? "AKAN BURNOUT" : "RISIKO BURNOUT RENDAH";
+  const title = isHighRisk ? "Burnout Terdeteksi" : isWarning ? "Risiko Sedang" : "Tidak Burnout";
+  const badgeLabel = isHighRisk ? "BURNOUT" : isWarning ? "RISIKO SEDANG" : "TIDAK BURNOUT";
   const badgeColor = isHighRisk ? 'bg-red-50 text-red-600 border-red-200' : isWarning ? 'bg-amber-50 text-amber-600 border-amber-200' : 'bg-green-50 text-[#15803d] border-green-200';
   const illustration = isHighRisk ? imgTinggi : isWarning ? imgSedang : imgRendah;
-  const illustrationLabel = isHighRisk ? "HIGH BURNOUT RISK" : isWarning ? "MODERATE BURNOUT RISK" : "LOW BURNOUT RISK";
+  const illustrationLabel = isHighRisk ? "BURNOUT DETECTED" : isWarning ? "MODERATE RISK" : "NO BURNOUT";
 
-  const score = confidence ? Math.round(confidence * 25) : (isHighRisk ? 22 : isWarning ? 15 : 8);
-  const fatiguePercent = Math.min(Math.round(confidence * 100), 100);
-  const stressPercent = Math.min(Math.round(confidence * 75), 100);
-  const anxietyPercent = Math.min(Math.round(confidence * 50), 100);
+  // Score bars based on resultScore (0-100)
+  const fatiguePercent = Math.min(Math.round(resultScore), 100);
+  const stressPercent = Math.min(Math.round(resultScore * 0.75), 100);
+  const anxietyPercent = Math.min(Math.round(resultScore * 0.5), 100);
 
   const description = result.description
     || (isHighRisk
-      ? "Tingkat stres dan kelelahan tinggi terdeteksi pada analisis."
+      ? "Burnout terdeteksi. Kondisimu menunjukkan tanda-tanda kelelahan yang signifikan."
       : isWarning
         ? "Kamu menunjukkan tanda-tanda menuju burnout. Perhatikan kondisimu."
         : "Kondisimu terlihat sehat dan seimbang.");
@@ -61,6 +59,9 @@ export default function ResultPage() {
     : isWarning
       ? "Tanda-tanda burnout terdeteksi. Pertimbangkan jeda, atur ulang prioritas, dan bicara dengan seseorang yang kamu percaya."
       : "Tingkat stres Anda terlihat sehat. Terus pertahankan keseimbangan dan rutinitas positifmu!";
+
+  // Top factors from backend
+  const topFactors = result.topfactor_attributions || [];
 
   return (
     <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col items-center justify-center px-4 py-8" style={{ fontFamily: "'Manrope', sans-serif" }}>

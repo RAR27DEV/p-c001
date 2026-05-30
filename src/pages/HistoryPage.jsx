@@ -36,8 +36,9 @@ export default function HistoryPage() {
   const avgScore = totalChecks > 0 ? Math.round(history.reduce((s, h) => s + (h.score || 0), 0) / totalChecks) : 0;
   const lastCheckDate = totalChecks > 0 ? new Date(history[0].created_at).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }) : '—';
   const healthyCount = history.filter(h => {
-    const label = (h.class_label || h.burnout_label || '').toLowerCase();
-    return h.burnout_class === 0 || label.includes('low') || label.includes('tidak');
+    const label = (h.class_label || h.prediction || '').toLowerCase();
+    const score = parseFloat(h.class_propabilities?.resultScore) || 0;
+    return h.burnout_class === 0 || label === 'tidak burnout' || label === 'low' || score < 30;
   }).length;
   const healthyPercent = totalChecks > 0 ? Math.round((healthyCount / totalChecks) * 100) : 0;
 
