@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { HistoryAPI, QuizAPI } from '../services/api';
+import { HistoryAPI, QuizAPI, SummaryAPI } from '../services/api';
 import Navbar from '../components/Navbar';
 import HistoryCard from '../components/HistoryCard';
 import { PageTransition, FadeInView, HoverCard } from '../components/PageTransition';
@@ -12,12 +12,18 @@ export default function HistoryPage() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [recommendations, setRecommendations] = useState([]);
 
   useEffect(() => {
     HistoryAPI.getHistory().then(res => {
       setHistory(res.data);
       setLoading(false);
     });
+    // Fetch rekomendasi dari /summaries
+    SummaryAPI.get().then(res => {
+      const recs = res.data?.result?.recommendations || [];
+      setRecommendations(recs);
+    }).catch(() => {});
   }, []);
 
   // Filter by type (quiz/scan) — sekarang bisa bekerja karena response punya field `type`
@@ -43,12 +49,6 @@ export default function HistoryPage() {
 
   const quizCount = history.filter(h => h.type === 'quiz').length;
   const scanCount = history.filter(h => h.type === 'scan').length;
-
-  const wellnessTips = [
-    { icon: 'self_improvement', color: 'text-[#7c9e87]', bg: 'bg-[#c7ebd1]/30', title: "Pernafasan Sadar", desc: "Coba pernapasan 4-7-8: tarik 4 detik, tahan 7 detik, buang 8 detik. Hanya 3 siklus bisa menenangkan sistem saraf." },
-    { icon: 'directions_walk', color: 'text-[#006a6a]', bg: 'bg-[#9deded]/20', title: "Jeda Gerak", desc: "Jalan kaki 10 menit di luar ruangan bisa mengurangi hormon stres hingga 25%." },
-    { icon: 'music_note', color: 'text-[#655975]', bg: 'bg-[#9e90af]/15', title: "Terapi Suara", desc: "Mendengarkan musik tenang selama 15 menit dapat menurunkan tingkat kecemasan secara signifikan." },
-  ];
 
   return (
     <PageTransition className="min-h-screen bg-[#faf9f6] flex flex-col relative overflow-x-hidden" style={{ fontFamily: "'Manrope', sans-serif" }}>
@@ -194,30 +194,34 @@ export default function HistoryPage() {
           )}
         </section>
 
-        {/* Wellness Tips */}
-        <section className="mt-4">
-          <FadeInView>
-            <h2 className="text-[28px] leading-[1.3] font-medium text-[#1a1c1a] mb-1" style={{ fontFamily: "'Newsreader', serif" }}>{"Kotak Peralatan Pemulihan"}</h2>
-            <p className="text-[15px] text-[#424843] mb-6">{"Praktik sederhana untuk mendukung kesejahteraanmu."}</p>
-          </FadeInView>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {wellnessTips.map((tip, idx) => (
-              <FadeInView key={idx} delay={0.1 + idx * 0.1}>
-                <HoverCard className="h-full">
-                  <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col gap-4 h-full">
-                    <motion.div className={`w-12 h-12 rounded-xl ${tip.bg} flex items-center justify-center`} whileHover={{ rotate: -8, scale: 1.1 }}>
-                      <span className={`material-symbols-outlined filled ${tip.color} text-[24px]`}>{tip.icon}</span>
-                    </motion.div>
-                    <div>
-                      <h3 className="text-[18px] font-semibold text-gray-900 mb-2" style={{ fontFamily: "'Newsreader', serif" }}>{tip.title}</h3>
-                      <p className="text-[14px] leading-[1.65] text-gray-500">{tip.desc}</p>
-                    </div>
-                  </div>
-                </HoverCard>
-              </FadeInView>
-            ))}
-          </div>
-        </section>
+        {/* Rekomendasi dari AI */}
+        {recommendations.length > 0 && (
+          <section className="mt-4">
+            <FadeInView>
+              <h2 className="text-[28px] leading-[1.3] font-medium text-[#1a1c1a] mb-1" style={{ fontFamily: "'Newsreader', serif" }}>{"Kotak Peralatan Pemulihan"}</h2>
+              <p className="text-[15px] text-gray-500 mb-6">{"Rekomendasi berdasarkan hasil pemeriksaanmu."}</p>
+            </FadeInView>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {recommendations.slice(0, 3).map((rec, idx) => {
+                const icons = ['self_improvement', 'directions_walk', 'music_note', 'spa', 'favorite', 'lightbulb'];
+                const colors = ['text-[#7c9e87]', 'text-[#006a6a]', 'text-[#655975]'];
+                const bgs = ['bg-[#c7ebd1]/30', 'bg-[#9deded]/20', 'bg-[#9e90af]/15'];
+                return (
+                  <FadeInView key={idx} delay={0.1 + idx * 0.1}>
+                    <HoverCard className="h-full">
+                      <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col gap-4 h-full">
+                        <div className={`w-12 h-12 rounded-xl ${bgs[idx % 3]} flex items-center justify-center`}>
+                          <span className={`material-symbols-outlined filled ${colors[idx % 3]} text-[24px]`}>{icons[idx % 6]}</span>
+                        </div>
+                        <p className="text-[14px] leading-[1.65] text-gray-600">{rec}</p>
+                      </div>
+                    </HoverCard>
+                  </FadeInView>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         {/* Banner Motivasi */}
         <FadeInView>
